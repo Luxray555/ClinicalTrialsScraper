@@ -1,16 +1,17 @@
 {
+  "name": "AI Scraper API",
   "nodes": [
     {
       "parameters": {
-        "content": "## Essaies clinique scrape",
-        "height": 840,
-        "width": 1640
+        "content": "## Scrape Clinical Trial",
+        "height": 860,
+        "width": 1580
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -540,
-        -380
+        1040,
+        -400
       ],
       "id": "3b922c89-f97d-4963-a8e5-3b1650e5e40d",
       "name": "Sticky Note"
@@ -22,7 +23,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -740,
+        800,
         -280
       ],
       "id": "0413d3b3-26af-4f44-8bd2-c9ad3fbb17e1",
@@ -36,7 +37,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
       "typeVersion": 1,
       "position": [
-        -1760,
+        -220,
         300
       ],
       "id": "e80d49bc-5b4a-448b-9f4f-afbdc6a459ba",
@@ -58,7 +59,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
       "typeVersion": 1,
       "position": [
-        260,
+        1800,
         240
       ],
       "id": "3cb99b71-16c6-4121-ae46-bce0c05f8f74",
@@ -82,7 +83,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        -1700,
+        -160,
         -260
       ],
       "id": "20e60334-d3a0-4bcf-affd-eedf06dc2825",
@@ -100,7 +101,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        280,
+        1820,
         -260
       ],
       "id": "5b8f28f2-f7b5-4b1d-87f7-49157ad43ff4",
@@ -113,7 +114,7 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
       "typeVersion": 1,
       "position": [
-        360,
+        1900,
         -40
       ],
       "id": "c8edffa9-eab3-4cd4-95b4-ad5e3e319282",
@@ -126,7 +127,7 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
       "typeVersion": 1,
       "position": [
-        -1580,
+        -40,
         20
       ],
       "id": "dcbfe8c7-fbff-48e6-bd3e-805b1f7c04a3",
@@ -134,7 +135,7 @@
     },
     {
       "parameters": {
-        "url": "={{ $('Start Webhook').item.json.query.url }}{{ $json.page }}",
+        "url": "={{ $('Start Webhook').item.json.query.url }}&{{ $('Successfully execution').item.json.query.paginationParameter }}={{ $json.page }}",
         "options": {
           "waitUntil": "networkidle0"
         }
@@ -142,7 +143,7 @@
       "type": "n8n-nodes-puppeteer.puppeteer",
       "typeVersion": 1,
       "position": [
-        -2420,
+        -880,
         -260
       ],
       "id": "91a29dc2-582d-4e53-b943-d8b8e43189e2",
@@ -158,7 +159,7 @@
       "type": "n8n-nodes-base.markdown",
       "typeVersion": 1,
       "position": [
-        -1920,
+        -380,
         -260
       ],
       "id": "2c4f86a5-6d59-4d19-9e0b-1fb7adeb2dd1",
@@ -185,7 +186,7 @@
       "type": "n8n-nodes-base.html",
       "typeVersion": 1.2,
       "position": [
-        -2160,
+        -620,
         -260
       ],
       "id": "61863383-3c9d-4ba5-b745-42b17e54f5cf",
@@ -198,7 +199,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1000,
+        540,
         -280
       ],
       "id": "ae68624d-0bc1-4f05-9f80-88bf850ef1eb",
@@ -214,7 +215,7 @@
       "type": "n8n-nodes-puppeteer.puppeteer",
       "typeVersion": 1,
       "position": [
-        -440,
+        1100,
         -260
       ],
       "id": "a2305644-f345-4cb7-a843-8b323069e495",
@@ -241,7 +242,7 @@
       "type": "n8n-nodes-base.html",
       "typeVersion": 1.2,
       "position": [
-        -220,
+        1320,
         -260
       ],
       "id": "5857e639-175e-407d-a887-0e84eef262f1",
@@ -255,7 +256,7 @@
       "type": "n8n-nodes-base.markdown",
       "typeVersion": 1,
       "position": [
-        40,
+        1580,
         -260
       ],
       "id": "0276ce80-b73c-4ce1-972f-f8ce1d786f7e",
@@ -268,7 +269,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        660,
+        2200,
         -260
       ],
       "id": "366bc0a0-f511-4922-a988-90c1598cefe9",
@@ -302,7 +303,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1240,
+        300,
         -260
       ],
       "id": "3b75ae15-6863-4207-998d-d24c18010630",
@@ -327,7 +328,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -720,
+        820,
         -480
       ],
       "id": "a2ddbbc6-0555-4cfd-a122-1e6a959c7e50",
@@ -352,29 +353,11 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -2680,
+        -1140,
         -260
       ],
       "id": "d47f9e96-7054-4fd2-884f-045e800f0970",
       "name": "Pagination Initialisation"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://localhost:3000/clinical-trials/create-or-update",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ $json.clinical_trial }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        900,
-        -260
-      ],
-      "id": "6ec8811f-adf1-4988-881f-38347650f0f6",
-      "name": "HTTP Request"
     },
     {
       "parameters": {
@@ -385,27 +368,12 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -3220,
-        -260
+        -3140,
+        -240
       ],
       "id": "ee483dda-0467-4a6e-b1c8-90804156202d",
       "name": "Start Webhook",
       "webhookId": "c3905bc0-5807-433c-9aae-c77ab59b363f"
-    },
-    {
-      "parameters": {
-        "respondWith": "json",
-        "responseBody": "={\n  \"status\": \"STARTED\",\n  \"id\": \"{{ $execution.id }}\",\n  \"stopUrl\": {\n    \"url\": \"http://localhost:5678/api/v1/executions/{{ $execution.id }}\",\n    \"method\": \"DELETE\"\n  }\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.4,
-      "position": [
-        -2980,
-        -260
-      ],
-      "id": "5a4d7e7f-5d0c-4519-8dfd-e4efdaba9e3f",
-      "name": "Return execution id"
     },
     {
       "parameters": {
@@ -415,7 +383,7 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
       "position": [
-        -1400,
+        140,
         300
       ],
       "id": "ab351651-e4e3-42fc-a53e-688a992d4f21",
@@ -429,13 +397,380 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
       "position": [
-        540,
+        2080,
         220
       ],
       "id": "0471c92c-4f99-40e2-9b21-947a4f7c1659",
       "name": "CLINICAL TRIAL SCHEMA PARSER"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Start Webhook').item.json.query.url }}",
+        "options": {
+          "response": {
+            "response": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1980,
+        -240
+      ],
+      "id": "fc7fb58c-8259-47f3-943f-41ccd1b23b19",
+      "name": "Test Url Search Page",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"statusCode\": \"400\",\n  \"error\": \"Bad Request\",\n  \"message\": \"Missing required parameter: url\",\n  \"timestamp\": \"{{ $now }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -2160,
+        0
+      ],
+      "id": "f6175ce1-6a06-4e22-8167-16711ce80650",
+      "name": "Need Url Error"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "502828ba-2866-4cac-892f-16a4b114cf51",
+              "leftValue": "={{ $('Start Webhook').item.json.query.url}}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2160,
+        -240
+      ],
+      "id": "3864f353-581f-4f3d-aee1-c42c3abe800f",
+      "name": "Check Url Parameter"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b25c948e-20a2-430e-9085-11c6141b4943",
+              "leftValue": "={{ $('Start Webhook').item.json.query.paginationParameter }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1720,
+        -240
+      ],
+      "id": "07ca22a1-027c-42e4-8646-1333451214d4",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"statusCode\": \"400\",\n  \"error\": \"BadRequest\",\n  \"message\": \"Missing required parameter: paginationParameter\",\n  \"timestamp\": \"{{ $now }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -1660,
+        0
+      ],
+      "id": "0e18b006-6b04-48fc-b68a-2c7cd3ad389d",
+      "name": "Need Pagination Error"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"statusCode\": 404,\n  \"error\": \"Not Found\",\n  \"message\": \"Provided URL not found or returned a 404 response\",\n  \"timestamp\": \"{{ $now }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -1920,
+        0
+      ],
+      "id": "482d0ffd-d4a7-48e5-975d-9c2bca7fee54",
+      "name": "Not Found Url Error"
+    },
+    {
+      "parameters": {
+        "content": "## Check Parameters and return statement",
+        "height": 660,
+        "width": 1520,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2800,
+        -400
+      ],
+      "id": "39f902b9-265a-4d6d-a057-6c744de31d89",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Scrape Search Page",
+        "height": 860,
+        "width": 1480,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1220,
+        -400
+      ],
+      "id": "adde1718-0050-48cc-890e-76b5ed5ebeab",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"statusCode\": 200,\n  \"message\": \"Workflow started successfully\",\n  \"data\": {\n    \"id\": {{ $execution.id }},\n    \"stopUrl\": {\n      \"url\": \"http://localhost:5678/api/v1/executions/{{ $execution.id }}\",\n      \"method\": \"DELETE\"\n    }\n  },\n  \"timestamp\": \"{{$now}}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -1440,
+        -260
+      ],
+      "id": "5a4d7e7f-5d0c-4519-8dfd-e4efdaba9e3f",
+      "name": "Successfully execution"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"statusCode\": 500,\n  \"error\": \"Internal Server Error\",\n  \"message\": \"Neo4j connection failed ❌. The database may be offline or unreachable.\",\n  \"service\": \"neo4j\",\n  \"suggestion\": \"Make sure the Neo4j instance is running and the credentials are correct.\",\n  \"timestamp\": \"{{$now}}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -2360,
+        0
+      ],
+      "id": "b0fc0345-8798-4d31-b7c1-b58a20ffc6cb",
+      "name": "Neo4j Not Lauched Error"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e4e9d764-a9e7-41ba-89a8-45136474b6e2",
+              "name": "Backend Endpoint",
+              "value": "http://localhost:3000",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2960,
+        -240
+      ],
+      "id": "842ebcd1-eb20-427c-9d7a-3c5b8af80559",
+      "name": "Default Parameters"
+    },
+    {
+      "parameters": {
+        "content": "## Define Backend Endpoint",
+        "height": 340,
+        "width": 180,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -3000,
+        -400
+      ],
+      "id": "accdfedd-5147-491f-8125-84b86a3011bb",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Default Parameters').item.json['Backend Endpoint'] }}/clinical-trials/create-or-update",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2760,
+        -240
+      ],
+      "id": "d88c6f01-1695-4f02-9b75-e95d26cd2c4e",
+      "name": "Test Backend",
+      "alwaysOutputData": false,
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "5CcWOL8yHJ5r3gH6",
+          "name": "Neo4j"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Default Parameters').item.json['Backend Endpoint'] }}/clinical-trials/create-or-update",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.clinical_trial }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2440,
+        -260
+      ],
+      "id": "6ec8811f-adf1-4988-881f-38347650f0f6",
+      "name": "Insert Clinical Trial"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2f2b6ca0-b6ff-4e8a-884b-12865ca0cfb6",
+              "leftValue": "={{ $(\"Test Backend\").item.json.error.code }}",
+              "rightValue": "ERR_BAD_RESPONSE",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2360,
+        -240
+      ],
+      "id": "6c923782-b7e3-40d0-ac9b-bd55d09931ef",
+      "name": "Check Neo4j Not Launched"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7ab3d289-55b5-42d7-b3f2-4d53b0b4571e",
+              "leftValue": "={{ $(\"Test Backend\").item.json.error.code }}",
+              "rightValue": "ECONNREFUSED",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2580,
+        -240
+      ],
+      "id": "230e57cb-d33a-4502-aa23-d33edacd001c",
+      "name": "Check Backend Not Launched"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"statusCode\": 500,\n  \"error\": \"Internal Server Error\",\n  \"message\": \"Backend connection failed ❌. The backend service is down.\",\n  \"service\": \"backend\",\n  \"suggestion\": \"Make sure the Backend instance is running .\",\n  \"timestamp\": \"{{$now}}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -2560,
+        0
+      ],
+      "id": "46a048d4-c291-444e-9add-9158042155a5",
+      "name": "Backend Not Lauched Error"
     }
   ],
+  "pinData": {},
   "connections": {
     "Loop Over Items": {
       "main": [
@@ -612,7 +947,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request",
+            "node": "Insert Clinical Trial",
             "type": "main",
             "index": 0
           }
@@ -653,33 +988,11 @@
         ]
       ]
     },
-    "HTTP Request": {
-      "main": [
-        [
-          {
-            "node": "Loop Over Items",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Start Webhook": {
       "main": [
         [
           {
-            "node": "Return execution id",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Return execution id": {
-      "main": [
-        [
-          {
-            "node": "Pagination Initialisation",
+            "node": "Default Parameters",
             "type": "main",
             "index": 0
           }
@@ -707,11 +1020,152 @@
           }
         ]
       ]
+    },
+    "Test Url Search Page": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Not Found Url Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Url Parameter": {
+      "main": [
+        [
+          {
+            "node": "Test Url Search Page",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Need Url Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Successfully execution",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Need Pagination Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Successfully execution": {
+      "main": [
+        [
+          {
+            "node": "Pagination Initialisation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Parameters": {
+      "main": [
+        [
+          {
+            "node": "Test Backend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Test Backend": {
+      "main": [
+        [
+          {
+            "node": "Check Backend Not Launched",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Insert Clinical Trial": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Neo4j Not Launched": {
+      "main": [
+        [
+          {
+            "node": "Neo4j Not Lauched Error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check Url Parameter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Backend Not Launched": {
+      "main": [
+        [
+          {
+            "node": "Backend Not Lauched Error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check Neo4j Not Launched",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "pinData": {},
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5b700b66-1647-4da1-8f26-a801add8263b",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "d19ad8d6d925953386bcaefd90b1322f319c955024c0f733144adb20b40abd2b"
-  }
+  },
+  "id": "SK0RcNw3jU3PC65K",
+  "tags": []
 }

@@ -90,7 +90,7 @@ n8n start
 #### 🖱 Option 1: From File
 - In the n8n UI, create a new workflow.
 - Click the three dots (⋮) in the top right > **Import from file**
-- Select the file [`workflows/AIScraperAPI.json`](workflows/AIScraperAPI.json).
+- Select the file [`workflows/AIScraperAPI.json`](workflows/AI_Scraper_API.json).
 
 <p align="center">
   <img src="assets/import_workflow.png" alt="Import Workflow" width="600"/>
@@ -98,17 +98,22 @@ n8n start
 
 #### 📋 Option 2: Copy-Paste the JSON
 - Create a new workflow in n8n
-- Open the [`workflows/AIScraperAPI.json`](workflows/AIScraperAPI.json) file.
+- Open the [`workflows/AIScraperAPI.json`](workflows/AI_Scraper_API.json) file.
 - Copy the entire JSON and paste it into the workflow editor (CTRL + C to copy, CTRL + V to paste).
 
 ### 🔐 Configure Credentials
 In the imported workflow, you'll need to configure credentials for:
-- **Mistral** (or another LLM provider)
+- **Mistral** (or another LLM provider) ➜ [Credentials Setup](https://console.mistral.ai/api-keys)
 <p align="center"> <img src="assets/mistral_credidential.png" alt="Mistral Credentials" /> </p>
 
 ### 🗄️ Database Setup
 You need to run Neo4j locally.<br>
 The backend to insert data is available here ➜ [Clinical Trials Backend](https://github.com/Luxray555/ClinicalTrials)
+
+If you have a different backend endpoint than `http://localhost:3000`, update the **Default Parameters** node in the workflow:
+<p align="center">
+  <img src="assets/remap_defeult_parameters.png" alt="Remap Default Parameters" width="600"/>
+</p>
 
 ### ✅ Activate the Workflow
 In n8n, activate the workflow by clicking the activation toggle at the top right:
@@ -123,16 +128,20 @@ In n8n, activate the workflow by clicking the activation toggle at the top right
 Trigger the workflow with the following HTTP request:
 
 ```bash
-curl -X GET http://localhost:5678/webhook/AIScraper?url=https://clinicaltrials.gov/search?limit=10&page=
+curl -X GET http://localhost:5678/webhook/AIScraper?url=https://clinicaltrials.gov/search?limit=10&paginationParameter=page
 ```
 🟢 Expected result:
 ```json
 {
-  "status": "STARTED",
-  "id": "977",
-  "stopUrl": {
-    "url": "http://localhost:5678/api/v1/executions/977",
-    "method": "DELETE"
+  "statusCode": 200,
+  "message": "Workflow started successfully",
+  "data": {
+    "id": 1039,
+    "stopUrl": {
+      "url": "http://localhost:5678/api/v1/executions/1039",
+      "method": "DELETE"
+    },
+    "timestamp": "2025-07-01T13:56:52.033-04:00"
   }
 }
 ```
@@ -144,8 +153,14 @@ curl -X GET http://localhost:5678/webhook/AIScraper?url=https://clinicaltrials.g
 To stop the workflow execution manually:
 
 ```bash
-curl -X DELETE http://localhost:5678/api/v1/executions/977
+curl -X DELETE http://localhost:5678/api/v1/executions/977 \
+  -H "Content-Type: application/json" \
+  -H "X-N8N-API-KEY: <your_api_key>" \
 ```
+
+Get the API key from the n8n settings (Settings > API Credentials) ➜ [http://localhost:5678/settings/api](http://localhost:5678/settings/api)
+
+
 
 ---
 
