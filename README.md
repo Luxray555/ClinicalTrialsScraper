@@ -10,8 +10,11 @@ This project uses a **n8n** workflow to automate the **ETL** (Extract, Transform
 <p align="center">
   <img src="./assets/scraper_workflow.png" alt="n8n workflow screenshot"/>
 </p>
+
+## 🎥 Demo
+
 <p align="center">
-    <video src="./assets/Test_Workflow_Scraper.mp4" controls width="600"></video>
+  <img src="assets/Demo_Workflow_Scraper.gif" alt="Demo" />
 </p>
 ---
 
