@@ -3,17 +3,17 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Scrape Clinical Trial",
-        "height": 860,
-        "width": 1580
+        "content": "## Scrape Clinical Trial by URL",
+        "height": 720,
+        "width": 1760
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1040,
-        -400
+        -5180,
+        -520
       ],
-      "id": "3b922c89-f97d-4963-a8e5-3b1650e5e40d",
+      "id": "57cdd6e3-783e-4f29-a663-4509e8d82796",
       "name": "Sticky Note"
     },
     {
@@ -23,10 +23,10 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        800,
-        -280
+        -5380,
+        -380
       ],
-      "id": "0413d3b3-26af-4f44-8bd2-c9ad3fbb17e1",
+      "id": "990cfcd1-1622-436b-be5f-65a1f486f3b7",
       "name": "Loop Over Items"
     },
     {
@@ -37,10 +37,10 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
       "typeVersion": 1,
       "position": [
-        -220,
-        300
+        -6580,
+        0
       ],
-      "id": "e80d49bc-5b4a-448b-9f4f-afbdc6a459ba",
+      "id": "891fce96-1386-41b0-9ade-692fbb2565f1",
       "name": "Mistral Cloud Chat Model",
       "credentials": {
         "mistralCloudApi": {
@@ -59,10 +59,10 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
       "typeVersion": 1,
       "position": [
-        1800,
-        240
+        -4200,
+        40
       ],
-      "id": "3cb99b71-16c6-4121-ae46-bce0c05f8f74",
+      "id": "43586a0a-3011-4ed6-abf7-9a323d92c504",
       "name": "Mistral Cloud Chat Model1",
       "credentials": {
         "mistralCloudApi": {
@@ -74,19 +74,19 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Voici l'url de la page de recherche:\n{{ $('Search Page Request').item.json.url }}\nVoici la page html:\n{{ $json.data }}",
+        "text": "=Voici l'url de la page de recherche:\n{{ $('Search Page Request').first().json.url }}\nVoici la page html:\n{{ $json.data }}",
         "hasOutputParser": true,
         "options": {
-          "systemMessage": "Tu es un expert en extraction d’informations depuis du HTML (web scraping). Ton rôle est d’analyser une page de recherche d’essais cliniques et d’extraire **uniquement** les URLs complètes des essais cliniques listés dans cette page.\n\nUtilise l’URL de la page de recherche fournie si besoin pour compléter les liens relatifs.\n\nTu ne dois pas deviner de liens. Si la page ne contient **aucun** lien vers des essais cliniques (par exemple si la recherche est vide ou en fin de pagination), tu dois obligatoirement renvoyer dans le format JSON SCHEMA suivant:\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"urls\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\",\n        \"format\": \"uri\"\n      }\n    }\n  }\n}\n"
+          "systemMessage": "Tu es un expert en extraction d’informations depuis du HTML (web scraping).\nTon rôle est d’analyser une page de recherche d’essais cliniques et de me renvoyer :\n\nLes URLs complètes des essais cliniques listés dans la page (s'ils sont présents) dans le champ urls.\n\nLes informations complètes des essais cliniques qui n'ont pas d'URL de redirection dans leurs page de détail, tu ajoutera leurs informations dans le champ clinical_trials.\nIl ne faut surtout pas que un essai clinique ayant un url de redirection de detail soit également mit dans clinical_trials.\n\n📌 Règles strictes à respecter :\n\nTu ne dois jamais inventer ou deviner d’URL.\n\nSi aucun essai clinique n’est présent (page vide ou fin de pagination), renvoie un objet contenant deux listes vides.\n\nPour les liens relatifs, utilise l’URL source de la page pour les transformer en liens absolus.\n\nTu dois renvoyer le résultat strictement au format JSON SCHEMA suivant :\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"urls\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\",\n        \"format\": \"uri\"\n      }\n    },\n    \"clinical_trials\": {\n      \"type\": \"array\",\n      \"items\": {\n          \"type\": \"object\",\n          \"properties\": {\n            \"originalSourceId\": {\n              \"type\": \"string\"\n            },\n            \"trialSourceUrl\": {\n              \"type\": \"string\",\n              \"format\": \"uri\"\n            },\n            \"title\": {\n              \"type\": \"string\"\n            },\n            \"currentEnrollmentCount\": {\n              \"type\": \"integer\"\n            },\n            \"organization\": {\n              \"type\": \"string\"\n            },\n            \"summary\": {\n              \"type\": \"string\"\n            },\n            \"status\": {\n              \"type\": \"string\",\n              \"enum\": [\"COMPLETED\", \"TERMINATED\", \"RECRUITING\", \"NOT_YET_RECRUITING\", \"WITHDRAWN\", \"SUSPENDED\", \"UNKNOWN\", \"ACTIVE_NOT_RECRUITING\", \"ENROLLING_BY_INVITATION\", \"APPROVED_FOR_MARKETING\", \"NO_LONGER_AVAILABLE\", \"TEMPORARILY_NOT_AVAILABLE\"]\n            },\n            \"type\": {\n              \"type\": \"string\",\n              \"enum\": [\"INTERVENTIONAL\", \"OBSERVATIONAL\", \"EXPANDED_ACCESS\"]\n            },\n            \"phase\": {\n              \"type\": \"string\",\n              \"enum\": [\"EARLY_PHASE1\", \"PHASE1\", \"PHASE2\", \"PHASE3\", \"PHASE4\", \"NA\"]\n            },\n            \"dates\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"startDate\": {\n                  \"type\": \"string\",\n                  \"format\": \"date\"\n                },\n                \"estimatedCompletionDate\": {\n                  \"type\": \"string\",\n                  \"format\": \"date\"\n                }\n              }\n            },\n            \"conditions\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"object\",\n                \"properties\":{\n                  \"name\": {\n                    \"type\": \"string\"\n                  }\n                }\n              }\n            },\n            \"interventions\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"object\",\n                \"properties\": {\n                  \"name\": {\n                    \"type\": \"string\"\n                  },\n                  \"description\": {\n                    \"type\": \"string\"\n                  },\n                  \"type\": {\n                    \"type\": \"string\",\n                    \"enum\": [\"DRUG\", \"BEHAVIORAL\", \"DEVICE\", \"BIOLOGICAL\", \"OTHER\", \"COMBINATION_PRODUCT\", \"PROCEDURE\", \"RADIATION\", \"DIETARY_SUPPLEMENT\", \"DIAGNOSTIC_TEST\", \"GENETIC\"]\n                  }\n                }\n              }\n            },\n            \"eligibility\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"gender\": {\n                  \"type\": \"string\",\n                  \"enum\": [\"ALL\", \"MALE\", \"FEMALE\"]\n                },\n                \"minAge\": {\n                  \"type\": [\"integer\", \"null\"]\n                },\n                \"maxAge\": {\n                  \"type\": [\"integer\", \"null\"]\n                },\n                \"eligibilityCriteria\": {\n                  \"type\": \"string\",\n                  \"description\": \"Description complete avec les titres des egibilité également avec les saut à la ligne\"\n                }\n              }\n            },\n            \"sponsor\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"name\": {\n                  \"type\": \"string\"\n                }\n              }\n            },\n            \"collaborators\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"object\",\n                \"properties\": {\n                  \"name\": {\n                    \"type\": \"string\"\n                  }\n                }\n              }\n            },\n            \"contacts\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"object\",\n                \"properties\": {\n                  \"email\": {\n                    \"type\": \"string\",\n                    \"format\": \"email\"\n                  },\n                  \"name\": {\n                    \"type\": \"string\"\n                  },\n                  \"phone\": {\n                    \"type\": \"string\"\n                  },\n                  \"isMainContact\": {\n                    \"type\": \"boolean\"\n                  }\n                }\n              }\n            },\n            \"locations\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"object\",\n                \"properties\": {\n                  \"city\": {\n                    \"type\": \"string\"\n                  },\n                  \"country\": {\n                    \"type\": \"string\"\n                  },\n                  \"facility\": {\n                    \"type\": \"string\"\n                  }\n                }\n              }\n            }\n          },\n          \"required\": [\"originalSource_id\", \"trialSource_url\", \"title\", \"currentEnrollmentCount\", \"organization\", \"summary\", \"status\", \"type\", \"phase\", \"dates\", \"conditions\", \"interventions\", \"eligibility\", \"sponsor\", \"collaborators\", \"contacts\", \"locations\"]\n      }\n    }\n  },\n  \"required\": [\"urls\"]\n}\n\nTu dois automatiquement trier chaque essai clinique dans le bon champ :\n\nSi l’essai possède une URL directe (ex. fichier PDF ou page de détail), place-le dans \"urls\".\n\nSinon, extrais toutes les données disponibles et place-le dans \"clinical_trials\"."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        -160,
-        -260
+        -6580,
+        -380
       ],
-      "id": "20e60334-d3a0-4bcf-affd-eedf06dc2825",
+      "id": "0806a428-300d-4c90-a222-f86247b742af",
       "name": "AI Agent Search Page"
     },
     {
@@ -101,10 +101,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        1820,
-        -260
+        -4200,
+        -380
       ],
-      "id": "5b8f28f2-f7b5-4b1d-87f7-49157ad43ff4",
+      "id": "b210505d-cf8e-4d10-85e6-9a4a5a28ba12",
       "name": "AI Agent Scrape Page"
     },
     {
@@ -114,10 +114,10 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
       "typeVersion": 1,
       "position": [
-        1900,
-        -40
+        -4120,
+        -140
       ],
-      "id": "c8edffa9-eab3-4cd4-95b4-ad5e3e319282",
+      "id": "5a0d2559-6df9-4860-ad7a-c4fbfe808b46",
       "name": "Auto-fixing Output Parser"
     },
     {
@@ -127,15 +127,15 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
       "typeVersion": 1,
       "position": [
-        -40,
-        20
+        -6460,
+        -180
       ],
-      "id": "dcbfe8c7-fbff-48e6-bd3e-805b1f7c04a3",
+      "id": "8362fec2-4c5e-4c8a-bfe2-44ce4d0f376e",
       "name": "Auto-fixing Output Parser1"
     },
     {
       "parameters": {
-        "url": "={{ $('Start Webhook').item.json.query.url }}&{{ $('Successfully execution').item.json.query.paginationParameter }}={{ $json.page }}",
+        "url": "={{ $('Url Pagination Formater').first().json.url }}{{ $json.page }}",
         "options": {
           "waitUntil": "networkidle0"
         }
@@ -143,10 +143,10 @@
       "type": "n8n-nodes-puppeteer.puppeteer",
       "typeVersion": 1,
       "position": [
-        -880,
-        -260
+        -7620,
+        -380
       ],
-      "id": "91a29dc2-582d-4e53-b943-d8b8e43189e2",
+      "id": "89765ce6-f558-4369-ad20-e82546a1ec9f",
       "name": "Search Page Request"
     },
     {
@@ -159,10 +159,10 @@
       "type": "n8n-nodes-base.markdown",
       "typeVersion": 1,
       "position": [
-        -380,
-        -260
+        -6920,
+        -380
       ],
-      "id": "2c4f86a5-6d59-4d19-9e0b-1fb7adeb2dd1",
+      "id": "1d40a9b4-fc91-468b-a6b9-c8606e84c50a",
       "name": "Search Page To Markdown"
     },
     {
@@ -186,10 +186,10 @@
       "type": "n8n-nodes-base.html",
       "typeVersion": 1.2,
       "position": [
-        -620,
-        -260
+        -7240,
+        -380
       ],
-      "id": "61863383-3c9d-4ba5-b745-42b17e54f5cf",
+      "id": "56ea6822-a2ac-4748-941d-ba99093c6424",
       "name": "Get Search Page Body"
     },
     {
@@ -199,27 +199,11 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        540,
-        -280
+        -5560,
+        -380
       ],
-      "id": "ae68624d-0bc1-4f05-9f80-88bf850ef1eb",
+      "id": "a695fe40-83b6-4c6d-9bfa-d8d3fc4f1587",
       "name": "Urls list for loop"
-    },
-    {
-      "parameters": {
-        "url": "={{ $json.url }}",
-        "options": {
-          "waitUntil": "networkidle0"
-        }
-      },
-      "type": "n8n-nodes-puppeteer.puppeteer",
-      "typeVersion": 1,
-      "position": [
-        1100,
-        -260
-      ],
-      "id": "a2305644-f345-4cb7-a843-8b323069e495",
-      "name": "Request Trinical Trial Page"
     },
     {
       "parameters": {
@@ -242,10 +226,10 @@
       "type": "n8n-nodes-base.html",
       "typeVersion": 1.2,
       "position": [
-        1320,
-        -260
+        -4700,
+        -380
       ],
-      "id": "5857e639-175e-407d-a887-0e84eef262f1",
+      "id": "844f0163-8a4b-4f2e-ab83-242c59203e10",
       "name": "Get Clinical Trial Page Body"
     },
     {
@@ -256,10 +240,10 @@
       "type": "n8n-nodes-base.markdown",
       "typeVersion": 1,
       "position": [
-        1580,
-        -260
+        -4560,
+        -380
       ],
-      "id": "0276ce80-b73c-4ce1-972f-f8ce1d786f7e",
+      "id": "f9963aad-f07c-4fad-88ab-3d24e8c72098",
       "name": "Clinical Trial Page To Markdown"
     },
     {
@@ -269,45 +253,11 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2200,
-        -260
+        -3820,
+        -380
       ],
-      "id": "366bc0a0-f511-4922-a988-90c1598cefe9",
+      "id": "9f69a07f-5bbe-4a21-825b-3cdaf98a1ff4",
       "name": "Convert To Mongo Data"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "453462cb-3e4d-4483-ae9b-f2264560e0b1",
-              "leftValue": "={{ $json.output.urls }}",
-              "rightValue": "",
-              "operator": {
-                "type": "array",
-                "operation": "notEmpty",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        300,
-        -260
-      ],
-      "id": "3b75ae15-6863-4207-998d-d24c18010630",
-      "name": "If Clinical Trials"
     },
     {
       "parameters": {
@@ -328,10 +278,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        820,
-        -480
+        -5360,
+        -600
       ],
-      "id": "a2ddbbc6-0555-4cfd-a122-1e6a959c7e50",
+      "id": "0893a87e-b9df-4fc7-9d13-ffd9e69f7a22",
       "name": "Pagination Incrementation"
     },
     {
@@ -353,10 +303,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -1140,
-        -260
+        -7940,
+        -380
       ],
-      "id": "d47f9e96-7054-4fd2-884f-045e800f0970",
+      "id": "5ef994af-9078-443a-bd19-34528e7b997a",
       "name": "Pagination Initialisation"
     },
     {
@@ -368,25 +318,25 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -3140,
-        -240
+        -10200,
+        -360
       ],
-      "id": "ee483dda-0467-4a6e-b1c8-90804156202d",
+      "id": "7438e060-ca70-4e7d-9c24-ecfd06f87bab",
       "name": "Start Webhook",
       "webhookId": "c3905bc0-5807-433c-9aae-c77ab59b363f"
     },
     {
       "parameters": {
         "schemaType": "manual",
-        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"urls\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\",\n        \"format\": \"uri\"\n      }\n    }\n  }\n}"
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"urls\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\",\n        \"format\": \"uri\"\n      }\n    },\n    \"clinical_trials\": {\n      \"type\": \"array\",\n      \"items\": {\n          \"type\": \"object\",\n          \"properties\": {\n            \"originalSourceId\": {\n              \"type\": \"string\"\n            },\n            \"trialSourceUrl\": {\n              \"type\": \"string\",\n              \"format\": \"uri\"\n            },\n            \"title\": {\n              \"type\": \"string\"\n            },\n            \"currentEnrollmentCount\": {\n              \"type\": \"integer\"\n            },\n            \"organization\": {\n              \"type\": \"string\"\n            },\n            \"summary\": {\n              \"type\": \"string\"\n            },\n            \"status\": {\n              \"type\": \"string\",\n              \"enum\": [\"COMPLETED\", \"TERMINATED\", \"RECRUITING\", \"NOT_YET_RECRUITING\", \"WITHDRAWN\", \"SUSPENDED\", \"UNKNOWN\", \"ACTIVE_NOT_RECRUITING\", \"ENROLLING_BY_INVITATION\", \"APPROVED_FOR_MARKETING\", \"NO_LONGER_AVAILABLE\", \"TEMPORARILY_NOT_AVAILABLE\"]\n            },\n            \"type\": {\n              \"type\": \"string\",\n              \"enum\": [\"INTERVENTIONAL\", \"OBSERVATIONAL\", \"EXPANDED_ACCESS\"]\n            },\n            \"phase\": {\n              \"type\": \"string\",\n              \"enum\": [\"EARLY_PHASE1\", \"PHASE1\", \"PHASE2\", \"PHASE3\", \"PHASE4\", \"NA\"]\n            },\n            \"dates\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"startDate\": {\n                  \"type\": \"string\",\n                  \"format\": \"date\"\n                },\n                \"estimatedCompletionDate\": {\n                  \"type\": \"string\",\n                  \"format\": \"date\"\n                }\n              }\n            },\n            \"conditions\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"object\",\n                \"properties\":{\n                  \"name\": {\n                    \"type\": \"string\"\n                  }\n                }\n              }\n            },\n            \"interventions\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"object\",\n                \"properties\": {\n                  \"name\": {\n                    \"type\": \"string\"\n                  },\n                  \"description\": {\n                    \"type\": \"string\"\n                  },\n                  \"type\": {\n                    \"type\": \"string\",\n                    \"enum\": [\"DRUG\", \"BEHAVIORAL\", \"DEVICE\", \"BIOLOGICAL\", \"OTHER\", \"COMBINATION_PRODUCT\", \"PROCEDURE\", \"RADIATION\", \"DIETARY_SUPPLEMENT\", \"DIAGNOSTIC_TEST\", \"GENETIC\"]\n                  }\n                }\n              }\n            },\n            \"eligibility\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"gender\": {\n                  \"type\": \"string\",\n                  \"enum\": [\"ALL\", \"MALE\", \"FEMALE\"]\n                },\n                \"minAge\": {\n                  \"type\": [\"integer\", \"null\"]\n                },\n                \"maxAge\": {\n                  \"type\": [\"integer\", \"null\"]\n                },\n                \"eligibilityCriteria\": {\n                  \"type\": \"string\",\n                  \"description\": \"Description complete avec les titres des egibilité également avec les saut à la ligne\"\n                }\n              }\n            },\n            \"sponsor\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"name\": {\n                  \"type\": \"string\"\n                }\n              }\n            },\n            \"collaborators\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"object\",\n                \"properties\": {\n                  \"name\": {\n                    \"type\": \"string\"\n                  }\n                }\n              }\n            },\n            \"contacts\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"object\",\n                \"properties\": {\n                  \"email\": {\n                    \"type\": \"string\",\n                    \"format\": \"email\"\n                  },\n                  \"name\": {\n                    \"type\": \"string\"\n                  },\n                  \"phone\": {\n                    \"type\": \"string\"\n                  },\n                  \"isMainContact\": {\n                    \"type\": \"boolean\"\n                  }\n                }\n              }\n            },\n            \"locations\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"object\",\n                \"properties\": {\n                  \"city\": {\n                    \"type\": \"string\"\n                  },\n                  \"country\": {\n                    \"type\": \"string\"\n                  },\n                  \"facility\": {\n                    \"type\": \"string\"\n                  }\n                }\n              }\n            }\n          },\n          \"required\": [\"originalSource_id\", \"trialSource_url\", \"title\", \"currentEnrollmentCount\", \"organization\", \"summary\", \"status\", \"type\", \"phase\", \"dates\", \"conditions\", \"interventions\", \"eligibility\", \"sponsor\", \"collaborators\", \"contacts\", \"locations\"]\n      }\n    }\n  },\n  \"required\": [\"urls\"]\n}\n"
       },
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
       "position": [
-        140,
-        300
+        -6320,
+        0
       ],
-      "id": "ab351651-e4e3-42fc-a53e-688a992d4f21",
+      "id": "fd63c1cc-6484-4303-9f55-e8133d56a2c2",
       "name": "URLS OUTPUT SCHEMA PARSER"
     },
     {
@@ -397,10 +347,10 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
       "position": [
-        2080,
-        220
+        -3940,
+        40
       ],
-      "id": "0471c92c-4f99-40e2-9b21-947a4f7c1659",
+      "id": "9e04de4d-68bb-472a-a880-567721106084",
       "name": "CLINICAL TRIAL SCHEMA PARSER"
     },
     {
@@ -415,10 +365,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1980,
-        -240
+        -8940,
+        -360
       ],
-      "id": "fc7fb58c-8259-47f3-943f-41ccd1b23b19",
+      "id": "7b8b3c4a-3ec2-4c75-8ee4-91744780363a",
       "name": "Test Url Search Page",
       "onError": "continueErrorOutput"
     },
@@ -431,10 +381,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -2160,
-        0
+        -9120,
+        -120
       ],
-      "id": "f6175ce1-6a06-4e22-8167-16711ce80650",
+      "id": "b7c931d7-4d11-408b-addc-642065707e10",
       "name": "Need Url Error"
     },
     {
@@ -465,10 +415,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -2160,
-        -240
+        -9120,
+        -360
       ],
-      "id": "3864f353-581f-4f3d-aee1-c42c3abe800f",
+      "id": "30eac330-7592-416d-833a-1d2a0b3c875c",
       "name": "Check Url Parameter"
     },
     {
@@ -499,10 +449,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1720,
-        -240
+        -8680,
+        -360
       ],
-      "id": "07ca22a1-027c-42e4-8646-1333451214d4",
+      "id": "c1c9f7b8-3bc1-41e8-b78c-7d81a2a535f0",
       "name": "If"
     },
     {
@@ -514,10 +464,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -1660,
-        0
+        -8620,
+        -120
       ],
-      "id": "0e18b006-6b04-48fc-b68a-2c7cd3ad389d",
+      "id": "289b4c6d-7f4b-441b-8b06-47b0dd56f32b",
       "name": "Need Pagination Error"
     },
     {
@@ -529,10 +479,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -1920,
-        0
+        -8880,
+        -120
       ],
-      "id": "482d0ffd-d4a7-48e5-975d-9c2bca7fee54",
+      "id": "3365036d-4205-4157-9ad2-850a685e8101",
       "name": "Not Found Url Error"
     },
     {
@@ -545,26 +495,26 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -2800,
-        -400
+        -9760,
+        -520
       ],
-      "id": "39f902b9-265a-4d6d-a057-6c744de31d89",
+      "id": "3e36947a-824a-4283-b253-b284319b4732",
       "name": "Sticky Note1"
     },
     {
       "parameters": {
         "content": "## Scrape Search Page",
-        "height": 860,
-        "width": 1480,
+        "height": 680,
+        "width": 1920,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -1220,
-        -400
+        -8060,
+        -520
       ],
-      "id": "adde1718-0050-48cc-890e-76b5ed5ebeab",
+      "id": "0c586245-ef05-49b1-bcc4-0de779411c32",
       "name": "Sticky Note2"
     },
     {
@@ -576,10 +526,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -1440,
-        -260
+        -8400,
+        -380
       ],
-      "id": "5a4d7e7f-5d0c-4519-8dfd-e4efdaba9e3f",
+      "id": "cc52e84c-412d-4d06-911f-06c75fc95120",
       "name": "Successfully execution"
     },
     {
@@ -591,10 +541,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -2360,
-        0
+        -9320,
+        -120
       ],
-      "id": "b0fc0345-8798-4d31-b7c1-b58a20ffc6cb",
+      "id": "335c4dcb-072b-42b3-aeda-db200d5cf183",
       "name": "Neo4j Not Lauched Error"
     },
     {
@@ -614,10 +564,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -2960,
-        -240
+        -9960,
+        -360
       ],
-      "id": "842ebcd1-eb20-427c-9d7a-3c5b8af80559",
+      "id": "e137548e-f7c0-4997-ac00-bf8fd815c18a",
       "name": "Default Parameters"
     },
     {
@@ -630,10 +580,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -3000,
-        -400
+        -10000,
+        -520
       ],
-      "id": "accdfedd-5147-491f-8125-84b86a3011bb",
+      "id": "0c0a20b8-4d03-4eb8-a6d6-c9af2213f15e",
       "name": "Sticky Note3"
     },
     {
@@ -655,10 +605,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -2760,
-        -240
+        -9720,
+        -360
       ],
-      "id": "d88c6f01-1695-4f02-9b75-e95d26cd2c4e",
+      "id": "297cc200-bb4a-4ae2-adc9-da8606e9f6eb",
       "name": "Test Backend",
       "alwaysOutputData": false,
       "credentials": {
@@ -672,7 +622,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $('Default Parameters').item.json['Backend Endpoint'] }}/clinical-trials/create-or-update",
+        "url": "={{ $('Default Parameters').first().json['Backend Endpoint'] }}/clinical-trials/create-or-update",
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={{ $json.clinical_trial }}",
@@ -681,10 +631,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2440,
-        -260
+        -3580,
+        -380
       ],
-      "id": "6ec8811f-adf1-4988-881f-38347650f0f6",
+      "id": "a0538476-63bc-434c-8ac0-1f22c81391ab",
       "name": "Insert Clinical Trial"
     },
     {
@@ -714,10 +664,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -2360,
-        -240
+        -9320,
+        -360
       ],
-      "id": "6c923782-b7e3-40d0-ac9b-bd55d09931ef",
+      "id": "554a67fb-3a14-4d8a-9c6a-17898e6892b0",
       "name": "Check Neo4j Not Launched"
     },
     {
@@ -748,10 +698,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -2580,
-        -240
+        -9540,
+        -360
       ],
-      "id": "230e57cb-d33a-4502-aa23-d33edacd001c",
+      "id": "da4c5a9b-9037-43d8-8dd8-cf4d1fba0f15",
       "name": "Check Backend Not Launched"
     },
     {
@@ -763,11 +713,326 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -2560,
-        0
+        -9520,
+        -120
       ],
-      "id": "46a048d4-c291-444e-9add-9158042155a5",
+      "id": "589302cd-4f34-4a4f-9b40-da5964a4e4d7",
       "name": "Backend Not Lauched Error"
+    },
+    {
+      "parameters": {
+        "jsCode": "let currentUrl = $('Start Webhook').first().json.query.url;\nconst paramName = $('Start Webhook').first().json.query.paginationParameter\n\nif (currentUrl.includes('?')) {\n  currentUrl += `&${paramName}=`;\n} else {\n  currentUrl += `?${paramName}=`;\n}\n\nreturn {\n  json: {\n    url: currentUrl\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -8200,
+        -380
+      ],
+      "id": "d2c4fd86-e93a-4c0b-8abf-b304c20e8035",
+      "name": "Url Pagination Formater"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {
+          "waitUntil": "networkidle0"
+        }
+      },
+      "type": "n8n-nodes-puppeteer.puppeteer",
+      "typeVersion": 1,
+      "position": [
+        -4860,
+        -380
+      ],
+      "id": "ed3d07d9-8bf9-4743-b0cd-bf903b85087c",
+      "name": "Request Trinical Trial Page HTML"
+    },
+    {
+      "parameters": {},
+      "name": "Read PDF",
+      "type": "n8n-nodes-base.readPDF",
+      "position": [
+        -4720,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "a2a5145c-6c76-4a91-867a-90a04ca183da"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -4880,
+        -160
+      ],
+      "id": "e9cce22b-1f06-4b18-9d1d-dda0b0ba78e8",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -4540,
+        -160
+      ],
+      "id": "8c3776fb-72a8-4ca8-b21b-e7effa85bc83",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "54937763-e41c-4c31-b2b5-2b87bef1e972",
+              "name": "data",
+              "value": "={{ $json.data ? $json.data : $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -4380,
+        -380
+      ],
+      "id": "96b848e3-c60a-4a38-a370-5233416ea47a",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f5891d3f-c6f5-4a9c-8dbf-32c03d12420f",
+              "leftValue": "={{ $json.url }}",
+              "rightValue": ".pdf",
+              "operator": {
+                "type": "string",
+                "operation": "endsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -5120,
+        -380
+      ],
+      "id": "025babce-9ea5-4f1f-92da-2a969b1aa69d",
+      "name": "Check Pdf"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -5360,
+        380
+      ],
+      "id": "59db23ab-0a94-4d14-8118-0a6952485ff4",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "jsCode": "let items = [];\n\nfor (const clinical_trial of $('AI Agent Search Page').first().json.output.clinical_trials) {\n  items.push({\n    json: {\n      clinical_trial: clinical_trial\n    }\n  });\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5580,
+        380
+      ],
+      "id": "4cb4efb0-8905-46ab-bba2-c31f4c95487b",
+      "name": "Clinical Trial Info list for loop"
+    },
+    {
+      "parameters": {
+        "jsCode": "var item = {\n  clinical_trial: {\n    // Infos d'essai clinique ajoutées\n    title: $input.first().json.clinical_trial.title,\n    status: $input.first().json.clinical_trial.status,\n    summary: $input.first().json.clinical_trial.summary,\n    currentEnrollmentCount: $input.first().json.clinical_trial.currentEnrollmentCount,\n    type: $input.first().json.clinical_trial.type,\n    phase: $input.first().json.clinical_trial.phase,\n    organization: $input.first().json.clinical_trial.organization,\n    dates: $input.first().json.clinical_trial.dates,\n    conditions: $input.first().json.clinical_trial.conditions,\n    interventions: $input.first().json.clinical_trial.interventions,\n    eligibility: $input.first().json.clinical_trial.eligibility,\n    sponsor: $input.first().json.clinical_trial.sponsor,\n    collaborators: $input.first().json.clinical_trial.collaborators,\n    contacts: $input.first().json.clinical_trial.contacts,\n    locations: $input.first().json.clinical_trial.locations,\n    sourceMetaData: {\n      originalSourceId: $input.first().json.clinical_trial.originalSourceId,\n      trialSourceUrl: $input.first().json.clinical_trial.trialSourceUrl,\n      dataSource: {\n        name: \"ClinicalTrials.gov public API\",\n        type: \"API\",\n        uri: $('Start Webhook').first().json.query.url\n      }\n    }\n  }\n};\n\nreturn item;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5080,
+        380
+      ],
+      "id": "c7538e5e-a82d-4880-aa14-b375a39221b6",
+      "name": "Convert To Mongo Data1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Default Parameters').item.json['Backend Endpoint'] }}/clinical-trials/create-or-update",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.clinical_trial }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -4880,
+        380
+      ],
+      "id": "56dac698-c0d7-453e-93a5-36e05f07f26a",
+      "name": "Insert Clinical Trial1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "df50304b-9461-4987-950e-ecb039a83a4e",
+              "leftValue": "={{ $('AI Agent Search Page').item.json.output.urls }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -5740,
+        -360
+      ],
+      "id": "ad754719-25a5-471b-a0ab-66292dace5d9",
+      "name": "Check Urls"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "af941aaa-4775-418d-993f-3512dafb493f",
+              "leftValue": "={{ $('AI Agent Search Page').item.json.output.clinical_trials }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -5760,
+        380
+      ],
+      "id": "d7f1cc8f-1d6b-401e-938a-77bd14be7991",
+      "name": "Check Clinical Trials"
+    },
+    {
+      "parameters": {
+        "content": "## Insert no URL Clinical Trials",
+        "height": 420,
+        "width": 500,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -5180,
+        240
+      ],
+      "id": "22efc05c-5a4e-488a-a567-e54125a48dd1",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "65628810-5e3f-4110-8426-f7ca4d17142d",
+              "leftValue": "={{ $('AI Agent Search Page').item.json.output.urls }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "8cd302f6-46c6-4e97-85cb-efc2a138f68f",
+              "leftValue": "={{ $('AI Agent Search Page').item.json.output.clinical_trials }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -6040,
+        -380
+      ],
+      "id": "b5be0001-3223-424e-ac32-f7e49472f95f",
+      "name": "Check Infos"
     }
   ],
   "pinData": {},
@@ -783,7 +1048,7 @@
         ],
         [
           {
-            "node": "Request Trinical Trial Page",
+            "node": "Check Pdf",
             "type": "main",
             "index": 0
           }
@@ -826,7 +1091,7 @@
       "main": [
         [
           {
-            "node": "If Clinical Trials",
+            "node": "Check Infos",
             "type": "main",
             "index": 0
           }
@@ -910,17 +1175,6 @@
         ]
       ]
     },
-    "Request Trinical Trial Page": {
-      "main": [
-        [
-          {
-            "node": "Get Clinical Trial Page Body",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Get Clinical Trial Page Body": {
       "main": [
         [
@@ -936,7 +1190,7 @@
       "main": [
         [
           {
-            "node": "AI Agent Scrape Page",
+            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
@@ -952,18 +1206,6 @@
             "index": 0
           }
         ]
-      ]
-    },
-    "If Clinical Trials": {
-      "main": [
-        [
-          {
-            "node": "Urls list for loop",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        []
       ]
     },
     "Pagination Incrementation": {
@@ -1079,7 +1321,7 @@
       "main": [
         [
           {
-            "node": "Pagination Initialisation",
+            "node": "Url Pagination Formater",
             "type": "main",
             "index": 0
           }
@@ -1105,8 +1347,7 @@
             "type": "main",
             "index": 0
           }
-        ],
-        []
+        ]
       ]
     },
     "Insert Clinical Trial": {
@@ -1155,13 +1396,195 @@
           }
         ]
       ]
+    },
+    "Url Pagination Formater": {
+      "main": [
+        [
+          {
+            "node": "Pagination Initialisation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request Trinical Trial Page HTML": {
+      "main": [
+        [
+          {
+            "node": "Get Clinical Trial Page Body",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Read PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read PDF": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent Scrape Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Pdf": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Request Trinical Trial Page HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clinical Trial Info list for loop": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Check Urls",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Convert To Mongo Data1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert To Mongo Data1": {
+      "main": [
+        [
+          {
+            "node": "Insert Clinical Trial1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Clinical Trial1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Urls": {
+      "main": [
+        [
+          {
+            "node": "Urls list for loop",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pagination Incrementation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Clinical Trials": {
+      "main": [
+        [
+          {
+            "node": "Clinical Trial Info list for loop",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check Urls",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Infos": {
+      "main": [
+        [
+          {
+            "node": "Check Clinical Trials",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "5b700b66-1647-4da1-8f26-a801add8263b",
+  "versionId": "bcb1d744-418f-464a-858b-373badb5cbe6",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "d19ad8d6d925953386bcaefd90b1322f319c955024c0f733144adb20b40abd2b"

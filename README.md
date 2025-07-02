@@ -109,7 +109,7 @@ n8n start
 ### 🔐 Configure Credentials
 In the imported workflow, you'll need to configure credentials for:
 - **Mistral** (or another LLM provider) ➜ [Credentials Setup](https://console.mistral.ai/api-keys)
-<p align="center"> <img src="assets/mistral_credidential.png" alt="Mistral Credentials" /> </p>
+<p align="center"> <img src="assets/mistral_credential.png" alt="Mistral Credentials" /> </p>
 
 ### 🗄️ Database Setup
 You need to run Neo4j locally.<br>
