@@ -5,12 +5,12 @@
       "parameters": {
         "content": "## Scrape Clinical Trial by URL",
         "height": 720,
-        "width": 1760
+        "width": 2060
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -5180,
+        -4720,
         -520
       ],
       "id": "57cdd6e3-783e-4f29-a663-4509e8d82796",
@@ -23,7 +23,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -5380,
+        -4940,
         -380
       ],
       "id": "990cfcd1-1622-436b-be5f-65a1f486f3b7",
@@ -37,7 +37,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
       "typeVersion": 1,
       "position": [
-        -6580,
+        -6160,
         0
       ],
       "id": "891fce96-1386-41b0-9ade-692fbb2565f1",
@@ -59,7 +59,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
       "typeVersion": 1,
       "position": [
-        -4200,
+        -3500,
         40
       ],
       "id": "43586a0a-3011-4ed6-abf7-9a323d92c504",
@@ -83,7 +83,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        -6580,
+        -6120,
         -380
       ],
       "id": "0806a428-300d-4c90-a222-f86247b742af",
@@ -101,7 +101,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        -4200,
+        -3500,
         -380
       ],
       "id": "b210505d-cf8e-4d10-85e6-9a4a5a28ba12",
@@ -114,7 +114,7 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
       "typeVersion": 1,
       "position": [
-        -4120,
+        -3420,
         -140
       ],
       "id": "5a0d2559-6df9-4860-ad7a-c4fbfe808b46",
@@ -122,12 +122,14 @@
     },
     {
       "parameters": {
-        "options": {}
+        "options": {
+          "prompt": "Instructions:\n--------------\n{instructions}\n--------------\nCompletion:\n--------------\n{completion}\n--------------\n\nAbove, the Completion did not satisfy the constraints given in the Instructions.\nError:\n--------------\n{error}\n--------------\n\nPlease try again. Please only respond with an answer that satisfies the constraints laid out in the Instructions:"
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
       "typeVersion": 1,
       "position": [
-        -6460,
+        -6060,
         -180
       ],
       "id": "8362fec2-4c5e-4c8a-bfe2-44ce4d0f376e",
@@ -143,7 +145,7 @@
       "type": "n8n-nodes-puppeteer.puppeteer",
       "typeVersion": 1,
       "position": [
-        -7620,
+        -7240,
         -380
       ],
       "id": "89765ce6-f558-4369-ad20-e82546a1ec9f",
@@ -159,7 +161,7 @@
       "type": "n8n-nodes-base.markdown",
       "typeVersion": 1,
       "position": [
-        -6920,
+        -6440,
         -380
       ],
       "id": "1d40a9b4-fc91-468b-a6b9-c8606e84c50a",
@@ -186,7 +188,7 @@
       "type": "n8n-nodes-base.html",
       "typeVersion": 1.2,
       "position": [
-        -7240,
+        -6940,
         -380
       ],
       "id": "56ea6822-a2ac-4748-941d-ba99093c6424",
@@ -199,7 +201,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5560,
+        -5120,
         -380
       ],
       "id": "a695fe40-83b6-4c6d-9bfa-d8d3fc4f1587",
@@ -226,7 +228,7 @@
       "type": "n8n-nodes-base.html",
       "typeVersion": 1.2,
       "position": [
-        -4700,
+        -4260,
         -380
       ],
       "id": "844f0163-8a4b-4f2e-ab83-242c59203e10",
@@ -240,24 +242,11 @@
       "type": "n8n-nodes-base.markdown",
       "typeVersion": 1,
       "position": [
-        -4560,
+        -3900,
         -380
       ],
       "id": "f9963aad-f07c-4fad-88ab-3d24e8c72098",
       "name": "Clinical Trial Page To Markdown"
-    },
-    {
-      "parameters": {
-        "jsCode": "var item = {\n  clinical_trial: {\n    // Infos d'essai clinique ajoutées\n    title: $input.first().json.output.title,\n    status: $input.first().json.output.status,\n    summary: $input.first().json.output.summary,\n    currentEnrollmentCount: $input.first().json.output.currentEnrollmentCount,\n    type: $input.first().json.output.type,\n    phase: $input.first().json.output.phase,\n    organization: $input.first().json.output.organization,\n    dates: $input.first().json.output.dates,\n    conditions: $input.first().json.output.conditions,\n    interventions: $input.first().json.output.interventions,\n    eligibility: $input.first().json.output.eligibility,\n    sponsor: $input.first().json.output.sponsor,\n    collaborators: $input.first().json.output.collaborators,\n    contacts: $input.first().json.output.contacts,\n    locations: $input.first().json.output.locations,\n    sourceMetaData: {\n      originalSourceId: $input.first().json.output.originalSourceId,\n      trialSourceUrl: $input.first().json.output.trialSourceUrl,\n      dataSource: {\n        name: \"ClinicalTrials.gov public API\",\n        type: \"API\",\n        uri: $('Start Webhook').first().json.query.url\n      }\n    }\n  }\n};\n\nreturn item;\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -3820,
-        -380
-      ],
-      "id": "9f69a07f-5bbe-4a21-825b-3cdaf98a1ff4",
-      "name": "Convert To Mongo Data"
     },
     {
       "parameters": {
@@ -266,7 +255,7 @@
             {
               "id": "93e7c0f6-ef26-4199-9a75-c111cd00b4fd",
               "name": "page",
-              "value": "={{ $json.page ? $json.page + 1 : $('Pagination Initialisation').item.json.page + 1 }}",
+              "value": "={{ $json.page ? $json.page + 1 : $('Pagination Initialisation').first().json.page + 1 }}",
               "type": "number"
             }
           ]
@@ -278,7 +267,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -5360,
+        -4920,
         -600
       ],
       "id": "0893a87e-b9df-4fc7-9d13-ffd9e69f7a22",
@@ -303,7 +292,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -7940,
+        -7480,
         -380
       ],
       "id": "5ef994af-9078-443a-bd19-34528e7b997a",
@@ -318,7 +307,7 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -10200,
+        -9740,
         -360
       ],
       "id": "7438e060-ca70-4e7d-9c24-ecfd06f87bab",
@@ -333,7 +322,7 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
       "position": [
-        -6320,
+        -5920,
         0
       ],
       "id": "fd63c1cc-6484-4303-9f55-e8133d56a2c2",
@@ -347,7 +336,7 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
       "position": [
-        -3940,
+        -3240,
         40
       ],
       "id": "9e04de4d-68bb-472a-a880-567721106084",
@@ -365,7 +354,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -8940,
+        -8480,
         -360
       ],
       "id": "7b8b3c4a-3ec2-4c75-8ee4-91744780363a",
@@ -381,7 +370,7 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -9120,
+        -8660,
         -120
       ],
       "id": "b7c931d7-4d11-408b-addc-642065707e10",
@@ -415,7 +404,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -9120,
+        -8660,
         -360
       ],
       "id": "30eac330-7592-416d-833a-1d2a0b3c875c",
@@ -449,7 +438,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -8680,
+        -8220,
         -360
       ],
       "id": "c1c9f7b8-3bc1-41e8-b78c-7d81a2a535f0",
@@ -464,7 +453,7 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -8620,
+        -8160,
         -120
       ],
       "id": "289b4c6d-7f4b-441b-8b06-47b0dd56f32b",
@@ -479,7 +468,7 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -8880,
+        -8420,
         -120
       ],
       "id": "3365036d-4205-4157-9ad2-850a685e8101",
@@ -495,7 +484,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -9760,
+        -9300,
         -520
       ],
       "id": "3e36947a-824a-4283-b253-b284319b4732",
@@ -505,13 +494,13 @@
       "parameters": {
         "content": "## Scrape Search Page",
         "height": 680,
-        "width": 1920,
+        "width": 1860,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -8060,
+        -7600,
         -520
       ],
       "id": "0c586245-ef05-49b1-bcc4-0de779411c32",
@@ -526,7 +515,7 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -8400,
+        -7940,
         -380
       ],
       "id": "cc52e84c-412d-4d06-911f-06c75fc95120",
@@ -541,7 +530,7 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -9320,
+        -8860,
         -120
       ],
       "id": "335c4dcb-072b-42b3-aeda-db200d5cf183",
@@ -564,7 +553,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -9960,
+        -9500,
         -360
       ],
       "id": "e137548e-f7c0-4997-ac00-bf8fd815c18a",
@@ -580,7 +569,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -10000,
+        -9540,
         -520
       ],
       "id": "0c0a20b8-4d03-4eb8-a6d6-c9af2213f15e",
@@ -605,7 +594,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -9720,
+        -9260,
         -360
       ],
       "id": "297cc200-bb4a-4ae2-adc9-da8606e9f6eb",
@@ -631,7 +620,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -3580,
+        -2880,
         -380
       ],
       "id": "a0538476-63bc-434c-8ac0-1f22c81391ab",
@@ -664,7 +653,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -9320,
+        -8860,
         -360
       ],
       "id": "554a67fb-3a14-4d8a-9c6a-17898e6892b0",
@@ -698,7 +687,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -9540,
+        -9080,
         -360
       ],
       "id": "da4c5a9b-9037-43d8-8dd8-cf4d1fba0f15",
@@ -713,7 +702,7 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -9520,
+        -9060,
         -120
       ],
       "id": "589302cd-4f34-4a4f-9b40-da5964a4e4d7",
@@ -726,7 +715,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -8200,
+        -7740,
         -380
       ],
       "id": "d2c4fd86-e93a-4c0b-8abf-b304c20e8035",
@@ -742,7 +731,7 @@
       "type": "n8n-nodes-puppeteer.puppeteer",
       "typeVersion": 1,
       "position": [
-        -4860,
+        -4420,
         -380
       ],
       "id": "ed3d07d9-8bf9-4743-b0cd-bf903b85087c",
@@ -753,7 +742,7 @@
       "name": "Read PDF",
       "type": "n8n-nodes-base.readPDF",
       "position": [
-        -4720,
+        -4280,
         -160
       ],
       "typeVersion": 1,
@@ -773,7 +762,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -4880,
+        -4440,
         -160
       ],
       "id": "e9cce22b-1f06-4b18-9d1d-dda0b0ba78e8",
@@ -787,7 +776,7 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        -4540,
+        -4100,
         -160
       ],
       "id": "8c3776fb-72a8-4ca8-b21b-e7effa85bc83",
@@ -810,7 +799,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -4380,
+        -3680,
         -380
       ],
       "id": "96b848e3-c60a-4a38-a370-5233416ea47a",
@@ -843,7 +832,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -5120,
+        -4680,
         -380
       ],
       "id": "025babce-9ea5-4f1f-92da-2a969b1aa69d",
@@ -856,7 +845,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -5360,
+        -4920,
         380
       ],
       "id": "59db23ab-0a94-4d14-8118-0a6952485ff4",
@@ -869,7 +858,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5580,
+        -5140,
         380
       ],
       "id": "4cb4efb0-8905-46ab-bba2-c31f4c95487b",
@@ -882,7 +871,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5080,
+        -4640,
         380
       ],
       "id": "c7538e5e-a82d-4880-aa14-b375a39221b6",
@@ -900,7 +889,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -4880,
+        -4440,
         380
       ],
       "id": "56dac698-c0d7-453e-93a5-36e05f07f26a",
@@ -934,7 +923,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -5740,
+        -5300,
         -360
       ],
       "id": "ad754719-25a5-471b-a0ab-66292dace5d9",
@@ -968,7 +957,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -5760,
+        -5320,
         380
       ],
       "id": "d7f1cc8f-1d6b-401e-938a-77bd14be7991",
@@ -984,7 +973,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -5180,
+        -4720,
         240
       ],
       "id": "22efc05c-5a4e-488a-a567-e54125a48dd1",
@@ -1028,11 +1017,50 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -6040,
+        -5600,
         -380
       ],
       "id": "b5be0001-3223-424e-ac32-f7e49472f95f",
       "name": "Check Infos"
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = $input.first().json.body;\n\nconst cleanedHtml = html\n  .replace(/<header[\\s\\S]*?<\\/header>/gi, '')\n  .replace(/<footer[\\s\\S]*?<\\/footer>/gi, '')\n  .replace(/<script[\\s\\S]*?<\\/script>/gi, '')\n  .replace(/<style[\\s\\S]*?<\\/style>/gi, '')\n  .replace(/<nav[\\s\\S]*?<\\/nav>/gi, '')\n  .replace(/<svg[\\s\\S]*?<\\/svg>/gi, '')\n  .replace(/<noscript[\\s\\S]*?<\\/noscript>/gi, '')\n  .replace(/<link[\\s\\S]*?<\\/link>/gi, '')\n  .replace(/<meta[\\s\\S]*?<\\/meta>/gi, '')\n  .replace(/<aside[\\s\\S]*?<\\/aside>/gi, '')\n  .replace(/<iframe[\\s\\S]*?<\\/iframe>/gi, '')\n  .replace(/<canvas[\\s\\S]*?<\\/canvas>/gi, '')\n  .replace(/<figure[\\s\\S]*?<\\/figure>/gi, '')\n  .replace(/<img\\b[^>]*>/gi, '');\n\nreturn [\n  {\n    json: {\n      body: cleanedHtml\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4080,
+        -380
+      ],
+      "id": "4a6a0775-aac8-411c-b3cb-aefb099ea63d",
+      "name": "HTML CLEAN Clinical Page"
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = $input.first().json.body;\n\nconst cleanedHtml = html\n  .replace(/<header[\\s\\S]*?<\\/header>/gi, '')\n  .replace(/<footer[\\s\\S]*?<\\/footer>/gi, '')\n  .replace(/<script[\\s\\S]*?<\\/script>/gi, '')\n  .replace(/<style[\\s\\S]*?<\\/style>/gi, '')\n  .replace(/<nav[\\s\\S]*?<\\/nav>/gi, '')\n  .replace(/<svg[\\s\\S]*?<\\/svg>/gi, '')\n  .replace(/<noscript[\\s\\S]*?<\\/noscript>/gi, '')\n  .replace(/<link[\\s\\S]*?<\\/link>/gi, '')\n  .replace(/<meta[\\s\\S]*?<\\/meta>/gi, '')\n  .replace(/<aside[\\s\\S]*?<\\/aside>/gi, '')\n  .replace(/<iframe[\\s\\S]*?<\\/iframe>/gi, '')\n  .replace(/<canvas[\\s\\S]*?<\\/canvas>/gi, '')\n  .replace(/<figure[\\s\\S]*?<\\/figure>/gi, '')\n  .replace(/<img\\b[^>]*>/gi, '');\n\nreturn [\n  {\n    json: {\n      body: cleanedHtml\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -6700,
+        -380
+      ],
+      "id": "7d42120e-9258-4e6c-9fbf-ec134d0ff4f7",
+      "name": "HTML CLEAN Search Page"
+    },
+    {
+      "parameters": {
+        "jsCode": "var item = {\n  clinical_trial: {\n    // Infos d'essai clinique ajoutées\n    title: $input.first().json.output.title,\n    status: $input.first().json.output.status,\n    summary: $input.first().json.output.summary,\n    currentEnrollmentCount: $input.first().json.output.currentEnrollmentCount,\n    type: $input.first().json.output.type,\n    phase: $input.first().json.output.phase,\n    organization: $input.first().json.output.organization,\n    dates: $input.first().json.output.dates,\n    conditions: $input.first().json.output.conditions,\n    interventions: $input.first().json.output.interventions,\n    eligibility: $input.first().json.output.eligibility,\n    sponsor: $input.first().json.output.sponsor,\n    collaborators: $input.first().json.output.collaborators,\n    contacts: $input.first().json.output.contacts,\n    locations: $input.first().json.output.locations,\n    sourceMetaData: {\n      originalSourceId: $input.first().json.output.originalSourceId,\n      trialSourceUrl: $input.first().json.output.trialSourceUrl,\n      dataSource: {\n        name: \"ClinicalTrials.gov public API\",\n        type: \"API\",\n        uri: $('Start Webhook').first().json.query.url\n      }\n    }\n  }\n};\n\nreturn item;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3120,
+        -380
+      ],
+      "id": "9f69a07f-5bbe-4a21-825b-3cdaf98a1ff4",
+      "name": "Convert To Clinical Trial Data"
     }
   ],
   "pinData": {},
@@ -1102,7 +1130,7 @@
       "main": [
         [
           {
-            "node": "Convert To Mongo Data",
+            "node": "Convert To Clinical Trial Data",
             "type": "main",
             "index": 0
           }
@@ -1157,7 +1185,7 @@
       "main": [
         [
           {
-            "node": "Search Page To Markdown",
+            "node": "HTML CLEAN Search Page",
             "type": "main",
             "index": 0
           }
@@ -1179,7 +1207,7 @@
       "main": [
         [
           {
-            "node": "Clinical Trial Page To Markdown",
+            "node": "HTML CLEAN Clinical Page",
             "type": "main",
             "index": 0
           }
@@ -1191,17 +1219,6 @@
         [
           {
             "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Convert To Mongo Data": {
-      "main": [
-        [
-          {
-            "node": "Insert Clinical Trial",
             "type": "main",
             "index": 0
           }
@@ -1578,13 +1595,46 @@
           }
         ]
       ]
+    },
+    "HTML CLEAN Clinical Page": {
+      "main": [
+        [
+          {
+            "node": "Clinical Trial Page To Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML CLEAN Search Page": {
+      "main": [
+        [
+          {
+            "node": "Search Page To Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert To Clinical Trial Data": {
+      "main": [
+        [
+          {
+            "node": "Insert Clinical Trial",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "bcb1d744-418f-464a-858b-373badb5cbe6",
+  "versionId": "1435788a-9f8b-4566-a275-40698c4a38df",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "d19ad8d6d925953386bcaefd90b1322f319c955024c0f733144adb20b40abd2b"

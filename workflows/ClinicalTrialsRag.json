@@ -1,0 +1,224 @@
+{
+  "name": "ClinicalTrialsRag",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-goog-api-key",
+              "value": "AIzaSyCHn_Tg6t_Ts3VJZ_p4L78YRxUnMJE4An8"
+            },
+            {}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"models/text-embedding-004\",\n  \"content\": {\n    \"parts\":[\n      {\n        \"text\": \"{{ $(\"Chat Input\").item.json.chatInput }}\"\n      }\n    ]\n  }\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        180,
+        120
+      ],
+      "id": "e804f93f-a2e8-4396-b258-8aa5491d3899",
+      "name": "Gemini Text Embedding"
+    },
+    {
+      "parameters": {
+        "jsCode": "const trials = [];\n\nfor (const item of $input.all()) {\n  trials.push({\n    score: item.json.score,\n    id: item.json.id,\n    title: item.json.title,\n    summary: item.json.summary,\n    phase: item.json.phase,\n    status: item.json.status,\n    eligibility: item.json.eligibility,\n    conditions: item.json.conditions,\n    interventions: item.json.interventions,\n    date: item.json.dates,\n    sponsor: item.json.sponsor,\n    collaborators: item.json.collaborators,\n    contacts: item.json.contacts,\n    locations: item.json.locations,\n    metaData: item.json.clinicalTrialMetaData\n  });\n}\n\nreturn [\n  {\n    json: {\n      trials: trials,\n      trials_text: JSON.stringify(trials, null, 2)\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        120
+      ],
+      "id": "ab7ec6a5-d813-4867-a556-222241a6680c",
+      "name": "Reformate Respond Data"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1180,
+        120
+      ],
+      "id": "d403ab0a-20f4-4d71-98d7-491e81516f50",
+      "name": "Return Clinical Trials"
+    },
+    {
+      "parameters": {
+        "model": "mistral-large-latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+      "typeVersion": 1,
+      "position": [
+        760,
+        380
+      ],
+      "id": "d50a2853-1f81-4300-a3f1-910dfd5a035f",
+      "name": "Mistral Cloud Chat Model",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "6RV01vLp6EqdaDq4",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "graphDb",
+        "indexName": "",
+        "cypherQuery": "=CALL db.index.vector.queryNodes('clinicalTrialsVI', 10, [{{ $json.embedding.values }}])\nYIELD node, score \nOPTIONAL MATCH (node)-[:HAS_ELIGIBILITY]->(eligibility:Eligibility) \nOPTIONAL MATCH (node)-[:STUDIES_CONDITION]->(condition:Condition) \nOPTIONAL MATCH (node)-[:USES_INTERVENTION]->(intervention:Intervention) \nOPTIONAL MATCH (node)-[:HAS_DATES]->(dates:ClinicalTrialDates) \nOPTIONAL MATCH (node)-[:SPONSORED_BY]->(sponsor:Sponsor) \nOPTIONAL MATCH (node)-[:HAS_COLLABORATOR]->(collaborator:Collaborator) \nOPTIONAL MATCH (node)-[:HAS_CONTACT]->(contact:Contact) \nOPTIONAL MATCH (node)-[:LOCATED_AT]->(location:Location) \nOPTIONAL MATCH (node)-[:HAS_METADATA]->(clinicalTrialMetaData:ClinicalTrialMetaData) \nWITH \n  node, \n  score, \n  eligibility,\n  collect(DISTINCT condition) AS conditions,\n  collect(DISTINCT intervention) AS interventions,\n  dates,\n  sponsor,\n  collect(DISTINCT collaborator) AS collaborators,\n  collect(DISTINCT contact) AS contacts,\n  collect(DISTINCT location) AS locations,\n  clinicalTrialMetaData\nRETURN \nscore, \nnode.id AS id,\nnode.title AS title, \nnode.summary AS summary, \nnode.phase AS phase, \nnode.status AS status,\neligibility AS eligibility,\nconditions AS conditions,\ninterventions AS interventions,\ndates AS dates,\nsponsor AS sponsor,\ncollaborators AS collaborators,\ncontacts AS contacts,\nlocations AS locations,\nclinicalTrialMetaData AS clinicalTrialMetaData\nORDER BY score DESC\nLIMIT 10;\n"
+      },
+      "type": "n8n-nodes-neo4j.neo4j",
+      "typeVersion": 1,
+      "position": [
+        360,
+        120
+      ],
+      "id": "eed23b51-0359-4f58-a4ef-5b4b2facae20",
+      "name": "Vector Search",
+      "credentials": {
+        "neo4jApi": {
+          "id": "WlTVuYXtXiAn5lsm",
+          "name": "Neo4j account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Chat Input').first().json.chatInput }}",
+        "options": {
+          "systemMessage": "=Tu es un assistant expert en recherche biomédicale et clinique. Ton rôle est d’analyser des essais cliniques structurés en JSON (titre, résumé, résultats, etc.) et de répondre avec précision à des questions en te basant uniquement sur les informations fournies. Sois rigoureux, factuel, et clair. Ne fais pas d'hallucinations. Si l'information n’est pas dans les documents, dis-le. Renvoie également quelques sources des documents envoyer si possible.\n\nEt voici les documents cliniques pertinents au format JSON :\n\n{{ $(\"Reformate Respond Data\").item.json.trials_text }}\n\nEn te basant uniquement sur ces documents, rédige une réponse claire, synthétique et précise à la question posée. Ne fais aucune supposition au-delà de ce qui est écrit dans les documents.\n\nRéponds à la question de l'utilisateur.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        780,
+        120
+      ],
+      "id": "c1e8eec2-4a01-447e-8bd4-502cd5fb7d2a",
+      "name": "RAG AI Request"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        120
+      ],
+      "id": "1eedea3e-4aec-4392-bef7-b8cee13c2919",
+      "name": "Chat Input",
+      "webhookId": "0391761a-f812-40bb-8c49-6e756c7cbb71"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gemini Text Embedding": {
+      "main": [
+        [
+          {
+            "node": "Vector Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reformate Respond Data": {
+      "main": [
+        [
+          {
+            "node": "RAG AI Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Return Clinical Trials": {
+      "main": [
+        []
+      ]
+    },
+    "Mistral Cloud Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "RAG AI Request",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vector Search": {
+      "main": [
+        [
+          {
+            "node": "Reformate Respond Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RAG AI Request": {
+      "main": [
+        [
+          {
+            "node": "Return Clinical Trials",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Chat Input": {
+      "main": [
+        [
+          {
+            "node": "Gemini Text Embedding",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a43e9b52-fc62-452e-9281-cd2ac9be4d71",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d19ad8d6d925953386bcaefd90b1322f319c955024c0f733144adb20b40abd2b"
+  },
+  "id": "ug7ytlKxG9GuqNAg",
+  "tags": []
+}
