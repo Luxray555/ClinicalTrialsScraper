@@ -16,6 +16,7 @@ This project uses a **n8n** workflow to automate the **ETL** (Extract, Transform
 <p align="center">
   <img src="assets/Demo_Workflow_Scraper.gif" alt="Demo" />
 </p>
+
 ---
 
 ## 🧠 How It Works
