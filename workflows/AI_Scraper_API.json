@@ -10,10 +10,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -4720,
-        -520
+        -6120,
+        -800
       ],
-      "id": "57cdd6e3-783e-4f29-a663-4509e8d82796",
+      "id": "a46b7a9c-6ef2-4019-a02e-9fc3299fa4e4",
       "name": "Sticky Note"
     },
     {
@@ -23,10 +23,10 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -4940,
-        -380
+        -6340,
+        -660
       ],
-      "id": "990cfcd1-1622-436b-be5f-65a1f486f3b7",
+      "id": "3eb1c4e6-0eb8-4c45-9fed-1de79eb99205",
       "name": "Loop Over Items"
     },
     {
@@ -37,14 +37,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
       "typeVersion": 1,
       "position": [
-        -6160,
-        0
+        -7560,
+        -280
       ],
-      "id": "891fce96-1386-41b0-9ade-692fbb2565f1",
+      "id": "3a93dfea-1a0c-4f1f-81b7-376d6c3e310a",
       "name": "Mistral Cloud Chat Model",
       "credentials": {
         "mistralCloudApi": {
-          "id": "6RV01vLp6EqdaDq4",
+          "id": "eBAfhPYwoDL6vFvB",
           "name": "Mistral Cloud account"
         }
       }
@@ -59,14 +59,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
       "typeVersion": 1,
       "position": [
-        -3500,
-        40
+        -4900,
+        -240
       ],
-      "id": "43586a0a-3011-4ed6-abf7-9a323d92c504",
+      "id": "211ce9d9-7422-4aaa-98d7-02ec65cef84e",
       "name": "Mistral Cloud Chat Model1",
       "credentials": {
         "mistralCloudApi": {
-          "id": "6RV01vLp6EqdaDq4",
+          "id": "eBAfhPYwoDL6vFvB",
           "name": "Mistral Cloud account"
         }
       }
@@ -83,10 +83,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        -6120,
-        -380
+        -7520,
+        -660
       ],
-      "id": "0806a428-300d-4c90-a222-f86247b742af",
+      "id": "4625a9ab-377b-43b6-bd48-4c75be58c355",
       "name": "AI Agent Search Page"
     },
     {
@@ -101,10 +101,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        -3500,
-        -380
+        -4900,
+        -660
       ],
-      "id": "b210505d-cf8e-4d10-85e6-9a4a5a28ba12",
+      "id": "8478a669-3302-4966-82f2-7f85fb3c01a7",
       "name": "AI Agent Scrape Page"
     },
     {
@@ -114,10 +114,10 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
       "typeVersion": 1,
       "position": [
-        -3420,
-        -140
+        -4820,
+        -420
       ],
-      "id": "5a0d2559-6df9-4860-ad7a-c4fbfe808b46",
+      "id": "4b469fc0-5037-4977-9221-3dc95750f828",
       "name": "Auto-fixing Output Parser"
     },
     {
@@ -129,10 +129,10 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
       "typeVersion": 1,
       "position": [
-        -6060,
-        -180
+        -7460,
+        -460
       ],
-      "id": "8362fec2-4c5e-4c8a-bfe2-44ce4d0f376e",
+      "id": "50017d69-a628-498c-8a59-a677faef9dd2",
       "name": "Auto-fixing Output Parser1"
     },
     {
@@ -145,10 +145,10 @@
       "type": "n8n-nodes-puppeteer.puppeteer",
       "typeVersion": 1,
       "position": [
-        -7240,
-        -380
+        -8640,
+        -660
       ],
-      "id": "89765ce6-f558-4369-ad20-e82546a1ec9f",
+      "id": "f11031b5-ab54-4462-ae0c-31205bff552c",
       "name": "Search Page Request"
     },
     {
@@ -161,10 +161,10 @@
       "type": "n8n-nodes-base.markdown",
       "typeVersion": 1,
       "position": [
-        -6440,
-        -380
+        -7840,
+        -660
       ],
-      "id": "1d40a9b4-fc91-468b-a6b9-c8606e84c50a",
+      "id": "6dba7980-eb0e-4490-ac56-68af107bb621",
       "name": "Search Page To Markdown"
     },
     {
@@ -188,10 +188,10 @@
       "type": "n8n-nodes-base.html",
       "typeVersion": 1.2,
       "position": [
-        -6940,
-        -380
+        -8340,
+        -660
       ],
-      "id": "56ea6822-a2ac-4748-941d-ba99093c6424",
+      "id": "abfd0dde-f82f-4a75-aa9f-62c7d7cd84f6",
       "name": "Get Search Page Body"
     },
     {
@@ -201,10 +201,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5120,
-        -380
+        -6520,
+        -660
       ],
-      "id": "a695fe40-83b6-4c6d-9bfa-d8d3fc4f1587",
+      "id": "1e607326-d092-43a0-9eaf-8580236f427e",
       "name": "Urls list for loop"
     },
     {
@@ -228,10 +228,10 @@
       "type": "n8n-nodes-base.html",
       "typeVersion": 1.2,
       "position": [
-        -4260,
-        -380
+        -5660,
+        -660
       ],
-      "id": "844f0163-8a4b-4f2e-ab83-242c59203e10",
+      "id": "c79e8604-7cf7-4020-9a30-27bb9a53dd41",
       "name": "Get Clinical Trial Page Body"
     },
     {
@@ -242,10 +242,10 @@
       "type": "n8n-nodes-base.markdown",
       "typeVersion": 1,
       "position": [
-        -3900,
-        -380
+        -5300,
+        -660
       ],
-      "id": "f9963aad-f07c-4fad-88ab-3d24e8c72098",
+      "id": "043d68cb-f8c4-4f6c-8351-815a0a435608",
       "name": "Clinical Trial Page To Markdown"
     },
     {
@@ -267,10 +267,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -4920,
-        -600
+        -6320,
+        -880
       ],
-      "id": "0893a87e-b9df-4fc7-9d13-ffd9e69f7a22",
+      "id": "6fa8956e-065d-4f20-acde-e80f232e1e9a",
       "name": "Pagination Incrementation"
     },
     {
@@ -292,10 +292,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -7480,
-        -380
+        -8880,
+        -660
       ],
-      "id": "5ef994af-9078-443a-bd19-34528e7b997a",
+      "id": "e14597ab-9b99-4ccc-bb84-08d43c5f7b25",
       "name": "Pagination Initialisation"
     },
     {
@@ -307,10 +307,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -9740,
-        -360
+        -11140,
+        -640
       ],
-      "id": "7438e060-ca70-4e7d-9c24-ecfd06f87bab",
+      "id": "8388b310-9f8b-4547-bdf8-5f49f70467aa",
       "name": "Start Webhook",
       "webhookId": "c3905bc0-5807-433c-9aae-c77ab59b363f"
     },
@@ -322,10 +322,10 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
       "position": [
-        -5920,
-        0
+        -7320,
+        -280
       ],
-      "id": "fd63c1cc-6484-4303-9f55-e8133d56a2c2",
+      "id": "0aa23b72-fb9a-435d-b7d9-4e9359480f5a",
       "name": "URLS OUTPUT SCHEMA PARSER"
     },
     {
@@ -336,10 +336,10 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
       "position": [
-        -3240,
-        40
+        -4640,
+        -240
       ],
-      "id": "9e04de4d-68bb-472a-a880-567721106084",
+      "id": "47be77e5-62e5-4ca2-bf8f-eb687789294d",
       "name": "CLINICAL TRIAL SCHEMA PARSER"
     },
     {
@@ -354,10 +354,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -8480,
-        -360
+        -9880,
+        -640
       ],
-      "id": "7b8b3c4a-3ec2-4c75-8ee4-91744780363a",
+      "id": "eae2892e-4054-4896-8bba-cb98630ddfdc",
       "name": "Test Url Search Page",
       "onError": "continueErrorOutput"
     },
@@ -370,10 +370,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -8660,
-        -120
+        -10060,
+        -400
       ],
-      "id": "b7c931d7-4d11-408b-addc-642065707e10",
+      "id": "bef31b66-1133-429f-b6e6-bfabaa924d0a",
       "name": "Need Url Error"
     },
     {
@@ -404,10 +404,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -8660,
-        -360
+        -10060,
+        -640
       ],
-      "id": "30eac330-7592-416d-833a-1d2a0b3c875c",
+      "id": "5b62ce72-4044-4ca1-9129-7108c1ff4fb9",
       "name": "Check Url Parameter"
     },
     {
@@ -438,10 +438,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -8220,
-        -360
+        -9620,
+        -640
       ],
-      "id": "c1c9f7b8-3bc1-41e8-b78c-7d81a2a535f0",
+      "id": "a786d204-4124-4e9c-8856-f1925f7d45d0",
       "name": "If"
     },
     {
@@ -453,10 +453,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -8160,
-        -120
+        -9560,
+        -400
       ],
-      "id": "289b4c6d-7f4b-441b-8b06-47b0dd56f32b",
+      "id": "1ead6d55-e31d-4c7a-80d7-b901cf68bfe5",
       "name": "Need Pagination Error"
     },
     {
@@ -468,10 +468,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -8420,
-        -120
+        -9820,
+        -400
       ],
-      "id": "3365036d-4205-4157-9ad2-850a685e8101",
+      "id": "739ce1bf-dad0-4dba-9dc3-1401cbef1117",
       "name": "Not Found Url Error"
     },
     {
@@ -484,10 +484,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -9300,
-        -520
+        -10700,
+        -800
       ],
-      "id": "3e36947a-824a-4283-b253-b284319b4732",
+      "id": "0c87abde-e244-47b5-8925-ac818d0c9b43",
       "name": "Sticky Note1"
     },
     {
@@ -500,10 +500,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -7600,
-        -520
+        -9000,
+        -800
       ],
-      "id": "0c586245-ef05-49b1-bcc4-0de779411c32",
+      "id": "8a12da4a-89dc-4a1f-91d0-72aec0e8dd9c",
       "name": "Sticky Note2"
     },
     {
@@ -515,10 +515,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -7940,
-        -380
+        -9340,
+        -660
       ],
-      "id": "cc52e84c-412d-4d06-911f-06c75fc95120",
+      "id": "241c9a78-3f6d-46a9-9aa8-e16ca8b6994a",
       "name": "Successfully execution"
     },
     {
@@ -530,10 +530,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -8860,
-        -120
+        -10260,
+        -400
       ],
-      "id": "335c4dcb-072b-42b3-aeda-db200d5cf183",
+      "id": "b54484b4-8c45-4e6b-996d-748fe4d4bef0",
       "name": "Neo4j Not Lauched Error"
     },
     {
@@ -553,10 +553,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -9500,
-        -360
+        -10900,
+        -640
       ],
-      "id": "e137548e-f7c0-4997-ac00-bf8fd815c18a",
+      "id": "3aeab0ec-9416-4908-a283-84c8d9b495d6",
       "name": "Default Parameters"
     },
     {
@@ -569,17 +569,15 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -9540,
-        -520
+        -10940,
+        -800
       ],
-      "id": "0c0a20b8-4d03-4eb8-a6d6-c9af2213f15e",
+      "id": "3114376a-6d6d-4540-9abd-8ad70a96edcd",
       "name": "Sticky Note3"
     },
     {
       "parameters": {
         "url": "={{ $('Default Parameters').item.json['Backend Endpoint'] }}/clinical-trials/create-or-update",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpBasicAuth",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -594,18 +592,12 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -9260,
-        -360
+        -10660,
+        -640
       ],
-      "id": "297cc200-bb4a-4ae2-adc9-da8606e9f6eb",
+      "id": "fb1b9bee-0de1-433a-ad46-ad43280486f8",
       "name": "Test Backend",
       "alwaysOutputData": false,
-      "credentials": {
-        "httpBasicAuth": {
-          "id": "5CcWOL8yHJ5r3gH6",
-          "name": "Neo4j"
-        }
-      },
       "onError": "continueRegularOutput"
     },
     {
@@ -620,10 +612,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -2880,
-        -380
+        -4280,
+        -660
       ],
-      "id": "a0538476-63bc-434c-8ac0-1f22c81391ab",
+      "id": "8658e987-82a5-4b28-b13b-88aee5a3f009",
       "name": "Insert Clinical Trial"
     },
     {
@@ -653,10 +645,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -8860,
-        -360
+        -10260,
+        -640
       ],
-      "id": "554a67fb-3a14-4d8a-9c6a-17898e6892b0",
+      "id": "484dd360-8916-4b9d-af5c-f09a17a9d4a6",
       "name": "Check Neo4j Not Launched"
     },
     {
@@ -687,10 +679,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -9080,
-        -360
+        -10480,
+        -640
       ],
-      "id": "da4c5a9b-9037-43d8-8dd8-cf4d1fba0f15",
+      "id": "b41fadaf-737b-4d5a-a965-66743a8832a4",
       "name": "Check Backend Not Launched"
     },
     {
@@ -702,10 +694,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -9060,
-        -120
+        -10460,
+        -400
       ],
-      "id": "589302cd-4f34-4a4f-9b40-da5964a4e4d7",
+      "id": "ca8f8408-c410-493a-a2dd-052a7b7379da",
       "name": "Backend Not Lauched Error"
     },
     {
@@ -715,10 +707,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -7740,
-        -380
+        -9140,
+        -660
       ],
-      "id": "d2c4fd86-e93a-4c0b-8abf-b304c20e8035",
+      "id": "e9dd2396-a9e9-4eff-96fc-620d5f0a40d0",
       "name": "Url Pagination Formater"
     },
     {
@@ -731,10 +723,10 @@
       "type": "n8n-nodes-puppeteer.puppeteer",
       "typeVersion": 1,
       "position": [
-        -4420,
-        -380
+        -5820,
+        -660
       ],
-      "id": "ed3d07d9-8bf9-4743-b0cd-bf903b85087c",
+      "id": "d59a29ea-0689-4a3f-aad1-d52384bbce56",
       "name": "Request Trinical Trial Page HTML"
     },
     {
@@ -742,11 +734,11 @@
       "name": "Read PDF",
       "type": "n8n-nodes-base.readPDF",
       "position": [
-        -4280,
-        -160
+        -5680,
+        -440
       ],
       "typeVersion": 1,
-      "id": "a2a5145c-6c76-4a91-867a-90a04ca183da"
+      "id": "5d212168-610b-49a5-b181-334c809d2886"
     },
     {
       "parameters": {
@@ -762,10 +754,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -4440,
-        -160
+        -5840,
+        -440
       ],
-      "id": "e9cce22b-1f06-4b18-9d1d-dda0b0ba78e8",
+      "id": "54c55476-22fd-468b-a01d-2dc193fa8fa4",
       "name": "HTTP Request"
     },
     {
@@ -776,10 +768,10 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        -4100,
-        -160
+        -5500,
+        -440
       ],
-      "id": "8c3776fb-72a8-4ca8-b21b-e7effa85bc83",
+      "id": "8c061056-d005-4133-9781-2f02a807b3b6",
       "name": "Extract from File"
     },
     {
@@ -799,10 +791,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -3680,
-        -380
+        -5080,
+        -660
       ],
-      "id": "96b848e3-c60a-4a38-a370-5233416ea47a",
+      "id": "46c66f48-2e83-4da4-8fa0-3f13cb08b614",
       "name": "Edit Fields"
     },
     {
@@ -832,10 +824,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -4680,
-        -380
+        -6080,
+        -660
       ],
-      "id": "025babce-9ea5-4f1f-92da-2a969b1aa69d",
+      "id": "acdc3ded-c79f-4f66-b21a-5dcdb16ab04a",
       "name": "Check Pdf"
     },
     {
@@ -845,10 +837,10 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -4920,
-        380
+        -6320,
+        120
       ],
-      "id": "59db23ab-0a94-4d14-8118-0a6952485ff4",
+      "id": "82acd0ea-6e90-4766-ad5f-b55f0e73334f",
       "name": "Loop Over Items1"
     },
     {
@@ -858,10 +850,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5140,
-        380
+        -6540,
+        120
       ],
-      "id": "4cb4efb0-8905-46ab-bba2-c31f4c95487b",
+      "id": "c54c1734-b93a-49bb-998f-28d60f7ed7d1",
       "name": "Clinical Trial Info list for loop"
     },
     {
@@ -871,10 +863,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4640,
-        380
+        -6040,
+        120
       ],
-      "id": "c7538e5e-a82d-4880-aa14-b375a39221b6",
+      "id": "6a438887-eded-40c4-8625-31c3abc7fa8b",
       "name": "Convert To Mongo Data1"
     },
     {
@@ -889,10 +881,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -4440,
-        380
+        -5840,
+        120
       ],
-      "id": "56dac698-c0d7-453e-93a5-36e05f07f26a",
+      "id": "96b094cc-3c0b-4a66-beab-14d35c5d3390",
       "name": "Insert Clinical Trial1"
     },
     {
@@ -923,10 +915,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -5300,
-        -360
+        -6700,
+        -640
       ],
-      "id": "ad754719-25a5-471b-a0ab-66292dace5d9",
+      "id": "b396a9ac-c5f2-4da9-93be-5b42180517d4",
       "name": "Check Urls"
     },
     {
@@ -957,10 +949,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -5320,
-        380
+        -6720,
+        120
       ],
-      "id": "d7f1cc8f-1d6b-401e-938a-77bd14be7991",
+      "id": "04ec91a4-73a1-44d6-ba0e-11fc0d77e488",
       "name": "Check Clinical Trials"
     },
     {
@@ -973,10 +965,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -4720,
-        240
+        -6120,
+        -40
       ],
-      "id": "22efc05c-5a4e-488a-a567-e54125a48dd1",
+      "id": "0724e98f-11f6-449e-8bed-23aa9cb6f46f",
       "name": "Sticky Note4"
     },
     {
@@ -1017,10 +1009,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -5600,
-        -380
+        -7000,
+        -660
       ],
-      "id": "b5be0001-3223-424e-ac32-f7e49472f95f",
+      "id": "10e9361b-6787-480e-83ff-82071c8e3581",
       "name": "Check Infos"
     },
     {
@@ -1030,10 +1022,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4080,
-        -380
+        -5480,
+        -660
       ],
-      "id": "4a6a0775-aac8-411c-b3cb-aefb099ea63d",
+      "id": "04b1f55c-6267-4665-8038-2ec7551ddd27",
       "name": "HTML CLEAN Clinical Page"
     },
     {
@@ -1043,10 +1035,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -6700,
-        -380
+        -8100,
+        -660
       ],
-      "id": "7d42120e-9258-4e6c-9fbf-ec134d0ff4f7",
+      "id": "df0344ca-d1e8-400b-a24b-29471d928b4a",
       "name": "HTML CLEAN Search Page"
     },
     {
@@ -1056,10 +1048,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -3120,
-        -380
+        -4520,
+        -660
       ],
-      "id": "9f69a07f-5bbe-4a21-825b-3cdaf98a1ff4",
+      "id": "a31e3f40-49d7-4929-9b8f-63e69dc01c08",
       "name": "Convert To Clinical Trial Data"
     }
   ],
@@ -1634,11 +1626,11 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "71161498-f6a0-4c9d-a49a-b143b050a740",
+  "versionId": "fbe6d8ee-955d-481f-866c-e42755d7859b",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "d19ad8d6d925953386bcaefd90b1322f319c955024c0f733144adb20b40abd2b"
+    "instanceId": "14f4d3df5fed8f2097384600eccf148a77385e6a062fb86bbfa855b5102bd332"
   },
-  "id": "SK0RcNw3jU3PC65K",
+  "id": "xlhtqPZO7mesIHQG",
   "tags": []
 }
