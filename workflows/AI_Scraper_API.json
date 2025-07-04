@@ -18,9 +18,7 @@
     },
     {
       "parameters": {
-        "options": {
-          "reset": false
-        }
+        "options": {}
       },
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
@@ -1688,7 +1686,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "ccc7b0b5-46d3-4a86-9198-ff740f52934f",
+  "versionId": "227660fc-32be-42e8-8b39-392f8548f216",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "d19ad8d6d925953386bcaefd90b1322f319c955024c0f733144adb20b40abd2b"
