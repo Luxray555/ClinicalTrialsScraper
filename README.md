@@ -118,7 +118,7 @@ The backend to insert data is available here ➜ [Clinical Trials Backend](https
 
 If you have a different backend endpoint than `http://localhost:3000`, update the **Default Parameters** node in the workflow:
 <p align="center">
-  <img src="assets/remap_defeult_parameters.png" alt="Remap Default Parameters" width="600"/>
+  <img src="assets/remap_default_parameters.png" alt="Remap Default Parameters" width="600"/>
 </p>
 
 ### ✅ Activate the Workflow
