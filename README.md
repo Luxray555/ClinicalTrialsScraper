@@ -109,8 +109,8 @@ n8n start
 
 ### 🔐 Configure Credentials
 In the imported workflow, you'll need to configure credentials for:
-- **Mistral** (or another LLM provider) ➜ [Credentials Setup](https://console.mistral.ai/api-keys)
-<p align="center"> <img src="assets/mistral_credential.png" alt="Mistral Credentials" /> </p>
+- **Gemini** (or another LLM provider) ➜ [Credentials Setup](https://console.cloud.google.com/apis/credentials)
+<p align="center"> <img src="assets/gemini_credential.png" alt="Gemini Credentials" /> </p>
 
 ### 🗄️ Database Setup
 You need to run Neo4j locally.<br>
