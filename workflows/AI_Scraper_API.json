@@ -5,7 +5,7 @@
       "parameters": {
         "content": "## Scrape Clinical Trial by URL",
         "height": 600,
-        "width": 2240
+        "width": 2380
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -18,7 +18,9 @@
     },
     {
       "parameters": {
-        "options": {}
+        "options": {
+          "reset": false
+        }
       },
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
@@ -1084,6 +1086,19 @@
       ],
       "id": "f0b6df19-a2e6-4f2e-88ec-f82bb8fe4561",
       "name": "Pagination Incrementation1"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: null\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2220,
+        440
+      ],
+      "id": "dc9d57c9-bb8f-406f-ab90-0d5808d0e211",
+      "name": "RESET DATA"
     }
   ],
   "pinData": {},
@@ -1330,7 +1345,7 @@
       "main": [
         [
           {
-            "node": "Loop Over Items",
+            "node": "RESET DATA",
             "type": "main",
             "index": 0
           }
@@ -1656,13 +1671,24 @@
           }
         ]
       ]
+    },
+    "RESET DATA": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "88ca2744-54ca-454b-8845-02d4b3af4a5e",
+  "versionId": "ccc7b0b5-46d3-4a86-9198-ff740f52934f",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "d19ad8d6d925953386bcaefd90b1322f319c955024c0f733144adb20b40abd2b"
