@@ -1,0 +1,155 @@
+{
+  "type": "object",
+  "properties": {
+    "originalSourceId": {
+      "type": "string"
+    },
+    "trialSourceUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "title": {
+      "type": "string"
+    },
+    "currentEnrollmentCount": {
+      "type": "integer"
+    },
+    "organization": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["COMPLETED", "TERMINATED", "RECRUITING", "NOT_YET_RECRUITING", "WITHDRAWN", "SUSPENDED", "UNKNOWN", "ACTIVE_NOT_RECRUITING", "ENROLLING_BY_INVITATION", "APPROVED_FOR_MARKETING", "NO_LONGER_AVAILABLE", "TEMPORARILY_NOT_AVAILABLE"]
+    },
+    "type": {
+      "type": "string",
+      "enum": ["INTERVENTIONAL", "OBSERVATIONAL", "EXPANDED_ACCESS"]
+    },
+    "phase": {
+      "type": "string",
+      "enum": ["EARLY_PHASE1", "PHASE1", "PHASE2", "PHASE3", "PHASE4", "NA"]
+    },
+    "dates": {
+      "type": "object",
+      "properties": {
+        "startDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "estimatedCompletionDate": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties":{
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "interventions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["DRUG", "BEHAVIORAL", "DEVICE", "BIOLOGICAL", "OTHER", "COMBINATION_PRODUCT", "PROCEDURE", "RADIATION", "DIETARY_SUPPLEMENT", "DIAGNOSTIC_TEST", "GENETIC"]
+          }
+        }
+      }
+    },
+    "eligibility": {
+      "type": "object",
+      "properties": {
+        "gender": {
+          "type": "string",
+          "enum": ["ALL", "MALE", "FEMALE"]
+        },
+        "minAge": {
+          "type": ["integer", "null"]
+        },
+        "maxAge": {
+          "type": ["integer", "null"]
+        },
+        "eligibilityCriteria": {
+          "type": "string",
+          "description": "Description complete avec les titres des egibilité également avec les saut à la ligne"
+        }
+      }
+    },
+    "sponsor": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "collaborators": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "contacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "isMainContact": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "locations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "facility": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": ["originalSource_id", "trialSource_url", "title", "currentEnrollmentCount", "organization", "summary", "status", "type", "phase", "dates", "conditions", "interventions", "eligibility", "sponsor", "collaborators", "contacts", "locations"]
+}
