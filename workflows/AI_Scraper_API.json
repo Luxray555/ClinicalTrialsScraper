@@ -5,7 +5,7 @@
       "parameters": {
         "content": "## Scrape Clinical Trial by URL",
         "height": 600,
-        "width": 2380
+        "width": 2220
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -18,7 +18,10 @@
     },
     {
       "parameters": {
-        "options": {}
+        "batchSize": "={{ $('AI Agent Search Page').first().json.output.urls.length }}",
+        "options": {
+          "reset": true
+        }
       },
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
@@ -32,11 +35,9 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Voici l'url de la page de recherche:\n{{ $('Search Page Request').first().json.url }}\nVoici la page html:\n{{ $('Search Page To Markdown').item.json.data }}",
+        "text": "=Tu es un expert en extraction d’informations depuis du HTML (web scraping).\nTon rôle est d’analyser une page de recherche d’essais cliniques et de me renvoyer :\n\nLes URLs complètes des essais cliniques listés dans la page (s'ils sont présents) dans le champ urls.\n\nLes informations complètes des essais cliniques qui n'ont pas d'URL de redirection dans leurs page de détail, tu ajoutera leurs informations dans le champ clinical_trials.\nIl ne faut surtout pas que un essai clinique ayant un url de redirection de detail soit également mit dans clinical_trials.\n\nRègles strictes à respecter :\n\nTu ne dois jamais inventer ou deviner d’URL.\n\nSi aucun essai clinique n’est présent (page vide ou fin de pagination), renvoie un objet contenant deux listes vides.\n\nPour les liens relatifs, utilise l’URL source de la page pour les transformer en liens absolus.\n\nTu dois renvoyer le résultat strictement au format JSON SCHEMA suivant :\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"urls\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\",\n        \"format\": \"uri\"\n      }\n    },\n    \"clinical_trials\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"originalSourceId\": {\n            \"type\": \"string\"\n          },\n          \"trialSourceUrl\": {\n            \"type\": \"string\",\n            \"format\": \"uri\"\n          },\n          \"title\": {\n            \"type\": \"string\"\n          },\n          \"currentEnrollmentCount\": {\n            \"type\": \"integer\"\n          },\n          \"organization\": {\n            \"type\": \"string\"\n          },\n          \"summary\": {\n            \"type\": \"string\"\n          },\n          \"status\": {\n            \"type\": \"string\",\n            \"enum\": [\"COMPLETED\", \"TERMINATED\", \"RECRUITING\", \"NOT_YET_RECRUITING\", \"WITHDRAWN\", \"SUSPENDED\", \"UNKNOWN\", \"ACTIVE_NOT_RECRUITING\", \"ENROLLING_BY_INVITATION\", \"APPROVED_FOR_MARKETING\", \"NO_LONGER_AVAILABLE\", \"TEMPORARILY_NOT_AVAILABLE\"]\n          },\n          \"type\": {\n            \"type\": \"string\",\n            \"enum\": [\"INTERVENTIONAL\", \"OBSERVATIONAL\", \"EXPANDED_ACCESS\"]\n          },\n          \"phase\": {\n            \"type\": \"string\",\n            \"enum\": [\"EARLY_PHASE1\", \"PHASE1\", \"PHASE2\", \"PHASE3\", \"PHASE4\", \"NA\"]\n          },\n          \"dates\": {\n            \"type\": \"object\",\n            \"properties\": {\n              \"startDate\": {\n                \"type\": \"string\",\n                \"format\": \"date\"\n              },\n              \"estimatedCompletionDate\": {\n                \"type\": \"string\",\n                \"format\": \"date\"\n              }\n            }\n          },\n          \"conditions\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"object\",\n              \"properties\":{\n                \"name\": {\n                  \"type\": \"string\"\n                }\n              }\n            }\n          },\n          \"interventions\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"name\": {\n                  \"type\": \"string\"\n                },\n                \"description\": {\n                  \"type\": \"string\"\n                },\n                \"type\": {\n                  \"type\": \"string\",\n                  \"enum\": [\"DRUG\", \"BEHAVIORAL\", \"DEVICE\", \"BIOLOGICAL\", \"OTHER\", \"COMBINATION_PRODUCT\", \"PROCEDURE\", \"RADIATION\", \"DIETARY_SUPPLEMENT\", \"DIAGNOSTIC_TEST\", \"GENETIC\"]\n                }\n              }\n            }\n          },\n          \"eligibility\": {\n            \"type\": \"object\",\n            \"properties\": {\n              \"gender\": {\n                \"type\": \"string\",\n                \"enum\": [\"ALL\", \"MALE\", \"FEMALE\"]\n              },\n              \"minAge\": {\n                \"type\": [\"integer\", \"null\"]\n              },\n              \"maxAge\": {\n                \"type\": [\"integer\", \"null\"]\n              },\n              \"eligibilityCriteria\": {\n                \"type\": \"string\",\n                \"description\": \"Description complete avec les titres des egibilité également avec les saut à la ligne\"\n              }\n            }\n          },\n          \"sponsor\": {\n            \"type\": \"object\",\n            \"properties\": {\n              \"name\": {\n                \"type\": \"string\"\n              }\n            }\n          },\n          \"collaborators\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"name\": {\n                  \"type\": \"string\"\n                }\n              }\n            }\n          },\n          \"contacts\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"email\": {\n                  \"type\": \"string\",\n                  \"format\": \"email\"\n                },\n                \"name\": {\n                  \"type\": \"string\"\n                },\n                \"phone\": {\n                  \"type\": \"string\"\n                },\n                \"isMainContact\": {\n                  \"type\": \"boolean\"\n                }\n              }\n            }\n          },\n          \"locations\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"city\": {\n                  \"type\": \"string\"\n                },\n                \"country\": {\n                  \"type\": \"string\"\n                },\n                \"facility\": {\n                  \"type\": \"string\"\n                }\n              }\n            }\n          }\n        },\n        \"required\": [\"originalSource_id\", \"trialSource_url\", \"title\", \"currentEnrollmentCount\", \"organization\", \"summary\", \"status\", \"type\", \"phase\", \"dates\", \"conditions\", \"interventions\", \"eligibility\", \"sponsor\", \"collaborators\", \"contacts\", \"locations\"]\n      }\n    }\n  },\n  \"required\": [\"urls\"]\n}\n\nTu dois automatiquement trier chaque essai clinique dans le bon champ :\nSi l’essai possède une URL directe (ex. fichier PDF ou page de détail), place-le dans \"urls\".\n\nSinon, extrais toutes les données disponibles et place-le dans \"clinical_trials\".\n\nLa sortie doit être strictement un objet JSON brut, sans préfixe, balise Markdown, commentaire ni texte. Aucune explication, uniquement le JSON final.\n\nVoici l'url de la page de recherche:\n{{ $('Search Page Request').first().json.url }}\nVoici la page HTML au format MARKDOWN:\n{{ $('Search Page To Markdown').item.json.data }}",
         "hasOutputParser": true,
-        "options": {
-          "systemMessage": "Tu es un expert en extraction d’informations depuis du HTML (web scraping).\nTon rôle est d’analyser une page de recherche d’essais cliniques et de me renvoyer :\n\nLes URLs complètes des essais cliniques listés dans la page (s'ils sont présents) dans le champ urls.\n\nLes informations complètes des essais cliniques qui n'ont pas d'URL de redirection dans leurs page de détail, tu ajoutera leurs informations dans le champ clinical_trials.\nIl ne faut surtout pas que un essai clinique ayant un url de redirection de detail soit également mit dans clinical_trials.\n\nRègles strictes à respecter :\n\nTu ne dois jamais inventer ou deviner d’URL.\n\nSi aucun essai clinique n’est présent (page vide ou fin de pagination), renvoie un objet contenant deux listes vides.\n\nPour les liens relatifs, utilise l’URL source de la page pour les transformer en liens absolus.\n\nTu dois renvoyer le résultat strictement au format JSON SCHEMA suivant :\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"urls\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\",\n        \"format\": \"uri\"\n      }\n    },\n    \"clinical_trials\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"originalSourceId\": {\n            \"type\": \"string\"\n          },\n          \"trialSourceUrl\": {\n            \"type\": \"string\",\n            \"format\": \"uri\"\n          },\n          \"title\": {\n            \"type\": \"string\"\n          },\n          \"currentEnrollmentCount\": {\n            \"type\": \"integer\"\n          },\n          \"organization\": {\n            \"type\": \"string\"\n          },\n          \"summary\": {\n            \"type\": \"string\"\n          },\n          \"status\": {\n            \"type\": \"string\",\n            \"enum\": [\"COMPLETED\", \"TERMINATED\", \"RECRUITING\", \"NOT_YET_RECRUITING\", \"WITHDRAWN\", \"SUSPENDED\", \"UNKNOWN\", \"ACTIVE_NOT_RECRUITING\", \"ENROLLING_BY_INVITATION\", \"APPROVED_FOR_MARKETING\", \"NO_LONGER_AVAILABLE\", \"TEMPORARILY_NOT_AVAILABLE\"]\n          },\n          \"type\": {\n            \"type\": \"string\",\n            \"enum\": [\"INTERVENTIONAL\", \"OBSERVATIONAL\", \"EXPANDED_ACCESS\"]\n          },\n          \"phase\": {\n            \"type\": \"string\",\n            \"enum\": [\"EARLY_PHASE1\", \"PHASE1\", \"PHASE2\", \"PHASE3\", \"PHASE4\", \"NA\"]\n          },\n          \"dates\": {\n            \"type\": \"object\",\n            \"properties\": {\n              \"startDate\": {\n                \"type\": \"string\",\n                \"format\": \"date\"\n              },\n              \"estimatedCompletionDate\": {\n                \"type\": \"string\",\n                \"format\": \"date\"\n              }\n            }\n          },\n          \"conditions\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"object\",\n              \"properties\":{\n                \"name\": {\n                  \"type\": \"string\"\n                }\n              }\n            }\n          },\n          \"interventions\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"name\": {\n                  \"type\": \"string\"\n                },\n                \"description\": {\n                  \"type\": \"string\"\n                },\n                \"type\": {\n                  \"type\": \"string\",\n                  \"enum\": [\"DRUG\", \"BEHAVIORAL\", \"DEVICE\", \"BIOLOGICAL\", \"OTHER\", \"COMBINATION_PRODUCT\", \"PROCEDURE\", \"RADIATION\", \"DIETARY_SUPPLEMENT\", \"DIAGNOSTIC_TEST\", \"GENETIC\"]\n                }\n              }\n            }\n          },\n          \"eligibility\": {\n            \"type\": \"object\",\n            \"properties\": {\n              \"gender\": {\n                \"type\": \"string\",\n                \"enum\": [\"ALL\", \"MALE\", \"FEMALE\"]\n              },\n              \"minAge\": {\n                \"type\": [\"integer\", \"null\"]\n              },\n              \"maxAge\": {\n                \"type\": [\"integer\", \"null\"]\n              },\n              \"eligibilityCriteria\": {\n                \"type\": \"string\",\n                \"description\": \"Description complete avec les titres des egibilité également avec les saut à la ligne\"\n              }\n            }\n          },\n          \"sponsor\": {\n            \"type\": \"object\",\n            \"properties\": {\n              \"name\": {\n                \"type\": \"string\"\n              }\n            }\n          },\n          \"collaborators\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"name\": {\n                  \"type\": \"string\"\n                }\n              }\n            }\n          },\n          \"contacts\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"email\": {\n                  \"type\": \"string\",\n                  \"format\": \"email\"\n                },\n                \"name\": {\n                  \"type\": \"string\"\n                },\n                \"phone\": {\n                  \"type\": \"string\"\n                },\n                \"isMainContact\": {\n                  \"type\": \"boolean\"\n                }\n              }\n            }\n          },\n          \"locations\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"city\": {\n                  \"type\": \"string\"\n                },\n                \"country\": {\n                  \"type\": \"string\"\n                },\n                \"facility\": {\n                  \"type\": \"string\"\n                }\n              }\n            }\n          }\n        },\n        \"required\": [\"originalSource_id\", \"trialSource_url\", \"title\", \"currentEnrollmentCount\", \"organization\", \"summary\", \"status\", \"type\", \"phase\", \"dates\", \"conditions\", \"interventions\", \"eligibility\", \"sponsor\", \"collaborators\", \"contacts\", \"locations\"]\n      }\n    }\n  },\n  \"required\": [\"urls\"]\n}\n\nTu dois automatiquement trier chaque essai clinique dans le bon champ :\n\nSi l’essai possède une URL directe (ex. fichier PDF ou page de détail), place-le dans \"urls\".\n\nSinon, extrais toutes les données disponibles et place-le dans \"clinical_trials\"."
-        }
+        "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
@@ -52,11 +53,9 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Voici la page html:\n{{ $('Edit Fields').item.json.data }}",
+        "text": "=Tu es un expert en analyse HTML et en extraction d'informations web (web scraping). Ton rôle est d'examiner une page d'essaie clinique et d'identifier les données nécessaires requis dans le format JSON attendu ci dessous. Tu dois répondre uniquement en JSON structuré, sans commentaire.\n\nFormat JSON SCHEMA attendu :\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"originalSourceId\": {\n      \"type\": \"string\"\n    },\n    \"trialSourceUrl\": {\n      \"type\": \"string\",\n      \"format\": \"uri\"\n    },\n    \"title\": {\n      \"type\": \"string\"\n    },\n    \"currentEnrollmentCount\": {\n      \"type\": \"integer\"\n    },\n    \"organization\": {\n      \"type\": \"string\"\n    },\n    \"summary\": {\n      \"type\": \"string\"\n    },\n    \"status\": {\n      \"type\": \"string\",\n      \"enum\": [\"COMPLETED\", \"TERMINATED\", \"RECRUITING\", \"NOT_YET_RECRUITING\", \"WITHDRAWN\", \"SUSPENDED\", \"UNKNOWN\", \"ACTIVE_NOT_RECRUITING\", \"ENROLLING_BY_INVITATION\", \"APPROVED_FOR_MARKETING\", \"NO_LONGER_AVAILABLE\", \"TEMPORARILY_NOT_AVAILABLE\"]\n    },\n    \"type\": {\n      \"type\": \"string\",\n      \"enum\": [\"INTERVENTIONAL\", \"OBSERVATIONAL\", \"EXPANDED_ACCESS\"]\n    },\n    \"phase\": {\n      \"type\": \"string\",\n      \"enum\": [\"EARLY_PHASE1\", \"PHASE1\", \"PHASE2\", \"PHASE3\", \"PHASE4\", \"NA\"]\n    },\n    \"dates\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"startDate\": {\n          \"type\": \"string\",\n          \"format\": \"date\"\n        },\n        \"estimatedCompletionDate\": {\n          \"type\": \"string\",\n          \"format\": \"date\"\n        }\n      }\n    },\n    \"conditions\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\":{\n          \"name\": {\n            \"type\": \"string\"\n          }\n        }\n      }\n    },\n    \"interventions\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"name\": {\n            \"type\": \"string\"\n          },\n          \"description\": {\n            \"type\": \"string\"\n          },\n          \"type\": {\n            \"type\": \"string\",\n            \"enum\": [\"DRUG\", \"BEHAVIORAL\", \"DEVICE\", \"BIOLOGICAL\", \"OTHER\", \"COMBINATION_PRODUCT\", \"PROCEDURE\", \"RADIATION\", \"DIETARY_SUPPLEMENT\", \"DIAGNOSTIC_TEST\", \"GENETIC\"]\n          }\n        }\n      }\n    },\n    \"eligibility\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"gender\": {\n          \"type\": \"string\",\n          \"enum\": [\"ALL\", \"MALE\", \"FEMALE\"]\n        },\n        \"minAge\": {\n          \"type\": [\"integer\", \"null\"]\n        },\n        \"maxAge\": {\n          \"type\": [\"integer\", \"null\"]\n        },\n        \"eligibilityCriteria\": {\n          \"type\": \"string\",\n          \"description\": \"Description complete avec les titres des egibilité également avec les saut à la ligne\"\n        }\n      }\n    },\n    \"sponsor\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"name\": {\n          \"type\": \"string\"\n        }\n      }\n    },\n    \"collaborators\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"name\": {\n            \"type\": \"string\"\n          }\n        }\n      }\n    },\n    \"contacts\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"email\": {\n            \"type\": \"string\",\n            \"format\": \"email\"\n          },\n          \"name\": {\n            \"type\": \"string\"\n          },\n          \"phone\": {\n            \"type\": \"string\"\n          },\n          \"isMainContact\": {\n            \"type\": \"boolean\"\n          }\n        }\n      }\n    },\n    \"locations\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"city\": {\n            \"type\": \"string\"\n          },\n          \"country\": {\n            \"type\": \"string\"\n          },\n          \"facility\": {\n            \"type\": \"string\"\n          }\n        }\n      }\n    }\n  },\n  \"required\": [\"originalSource_id\", \"trialSource_url\", \"title\", \"currentEnrollmentCount\", \"organization\", \"summary\", \"status\", \"type\", \"phase\", \"dates\", \"conditions\", \"interventions\", \"eligibility\", \"sponsor\", \"collaborators\", \"contacts\", \"locations\"]\n}\n\nVoici la page HTML au format MARKDOWN:\n{{ $json.data }}",
         "hasOutputParser": true,
-        "options": {
-          "systemMessage": "Tu es un expert en analyse HTML et en extraction d'informations web (web scraping). Ton rôle est d'examiner une page d'essaie clinique et d'identifier les données nécessaires requis dans le format JSON attendu ci dessous. Tu dois répondre uniquement en JSON structuré, sans commentaire.\n\nFormat JSON SCHEMA attendu :\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"originalSourceId\": {\n      \"type\": \"string\"\n    },\n    \"trialSourceUrl\": {\n      \"type\": \"string\",\n      \"format\": \"uri\"\n    },\n    \"title\": {\n      \"type\": \"string\"\n    },\n    \"currentEnrollmentCount\": {\n      \"type\": \"integer\"\n    },\n    \"organization\": {\n      \"type\": \"string\"\n    },\n    \"summary\": {\n      \"type\": \"string\"\n    },\n    \"status\": {\n      \"type\": \"string\",\n      \"enum\": [\"COMPLETED\", \"TERMINATED\", \"RECRUITING\", \"NOT_YET_RECRUITING\", \"WITHDRAWN\", \"SUSPENDED\", \"UNKNOWN\", \"ACTIVE_NOT_RECRUITING\", \"ENROLLING_BY_INVITATION\", \"APPROVED_FOR_MARKETING\", \"NO_LONGER_AVAILABLE\", \"TEMPORARILY_NOT_AVAILABLE\"]\n    },\n    \"type\": {\n      \"type\": \"string\",\n      \"enum\": [\"INTERVENTIONAL\", \"OBSERVATIONAL\", \"EXPANDED_ACCESS\"]\n    },\n    \"phase\": {\n      \"type\": \"string\",\n      \"enum\": [\"EARLY_PHASE1\", \"PHASE1\", \"PHASE2\", \"PHASE3\", \"PHASE4\", \"NA\"]\n    },\n    \"dates\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"startDate\": {\n          \"type\": \"string\",\n          \"format\": \"date\"\n        },\n        \"estimatedCompletionDate\": {\n          \"type\": \"string\",\n          \"format\": \"date\"\n        }\n      }\n    },\n    \"conditions\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\":{\n          \"name\": {\n            \"type\": \"string\"\n          }\n        }\n      }\n    },\n    \"interventions\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"name\": {\n            \"type\": \"string\"\n          },\n          \"description\": {\n            \"type\": \"string\"\n          },\n          \"type\": {\n            \"type\": \"string\",\n            \"enum\": [\"DRUG\", \"BEHAVIORAL\", \"DEVICE\", \"BIOLOGICAL\", \"OTHER\", \"COMBINATION_PRODUCT\", \"PROCEDURE\", \"RADIATION\", \"DIETARY_SUPPLEMENT\", \"DIAGNOSTIC_TEST\", \"GENETIC\"]\n          }\n        }\n      }\n    },\n    \"eligibility\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"gender\": {\n          \"type\": \"string\",\n          \"enum\": [\"ALL\", \"MALE\", \"FEMALE\"]\n        },\n        \"minAge\": {\n          \"type\": [\"integer\", \"null\"]\n        },\n        \"maxAge\": {\n          \"type\": [\"integer\", \"null\"]\n        },\n        \"eligibilityCriteria\": {\n          \"type\": \"string\",\n          \"description\": \"Description complete avec les titres des egibilité également avec les saut à la ligne\"\n        }\n      }\n    },\n    \"sponsor\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"name\": {\n          \"type\": \"string\"\n        }\n      }\n    },\n    \"collaborators\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"name\": {\n            \"type\": \"string\"\n          }\n        }\n      }\n    },\n    \"contacts\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"email\": {\n            \"type\": \"string\",\n            \"format\": \"email\"\n          },\n          \"name\": {\n            \"type\": \"string\"\n          },\n          \"phone\": {\n            \"type\": \"string\"\n          },\n          \"isMainContact\": {\n            \"type\": \"boolean\"\n          }\n        }\n      }\n    },\n    \"locations\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"city\": {\n            \"type\": \"string\"\n          },\n          \"country\": {\n            \"type\": \"string\"\n          },\n          \"facility\": {\n            \"type\": \"string\"\n          }\n        }\n      }\n    }\n  },\n  \"required\": [\"originalSource_id\", \"trialSource_url\", \"title\", \"currentEnrollmentCount\", \"organization\", \"summary\", \"status\", \"type\", \"phase\", \"dates\", \"conditions\", \"interventions\", \"eligibility\", \"sponsor\", \"collaborators\", \"contacts\", \"locations\"]\n}"
-        }
+        "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
@@ -128,19 +127,6 @@
       ],
       "id": "d083a28e-5f3f-4d30-a4de-465ba54f506b",
       "name": "Get Search Page Body"
-    },
-    {
-      "parameters": {
-        "jsCode": "let items = [];\n\nfor (const url of $('AI Agent Search Page').first().json.output.urls) {\n  items.push({\n    json: {\n      url: url\n    }\n  });\n}\n\nreturn items;\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -380,
-        440
-      ],
-      "id": "5b05b524-66ec-46ca-8de3-32c514b16498",
-      "name": "Urls list for loop"
     },
     {
       "parameters": {
@@ -246,7 +232,7 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
       "position": [
-        1520,
+        1480,
         720
       ],
       "id": "5fc353ad-7080-428d-b5a9-3442e193bd9c",
@@ -742,7 +728,10 @@
     },
     {
       "parameters": {
-        "options": {}
+        "batchSize": "={{ $('AI Agent Search Page').first().json.output.clinical_trials.length }}",
+        "options": {
+          "reset": true
+        }
       },
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
@@ -765,19 +754,6 @@
       ],
       "id": "2101927e-601e-4396-9ccf-f81764bf7557",
       "name": "Clinical Trial Info list for loop"
-    },
-    {
-      "parameters": {
-        "jsCode": "var item = {\n  clinical_trial: {\n    // Infos d'essai clinique ajoutées\n    title: $input.first().json.clinical_trial.title,\n    status: $input.first().json.clinical_trial.status,\n    summary: $input.first().json.clinical_trial.summary,\n    currentEnrollmentCount: $input.first().json.clinical_trial.currentEnrollmentCount,\n    type: $input.first().json.clinical_trial.type,\n    phase: $input.first().json.clinical_trial.phase,\n    organization: $input.first().json.clinical_trial.organization,\n    dates: $input.first().json.clinical_trial.dates,\n    conditions: $input.first().json.clinical_trial.conditions,\n    interventions: $input.first().json.clinical_trial.interventions,\n    eligibility: $input.first().json.clinical_trial.eligibility,\n    sponsor: $input.first().json.clinical_trial.sponsor,\n    collaborators: $input.first().json.clinical_trial.collaborators,\n    contacts: $input.first().json.clinical_trial.contacts,\n    locations: $input.first().json.clinical_trial.locations,\n    sourceMetaData: {\n      originalSourceId: $input.first().json.clinical_trial.originalSourceId,\n      trialSourceUrl: $input.first().json.clinical_trial.trialSourceUrl,\n      dataSource: {\n        name: \"ClinicalTrials.gov public API\",\n        type: \"API\",\n        uri: $('Start Webhook').first().json.query.url\n      }\n    }\n  }\n};\n\nreturn item;\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        100,
-        1100
-      ],
-      "id": "a6011b6b-f3fd-4b87-a363-27cf51862ffa",
-      "name": "Convert To Mongo Data1"
     },
     {
       "parameters": {
@@ -927,7 +903,8 @@
     },
     {
       "parameters": {
-        "jsCode": "const html = $input.first().json.body;\n\nconst cleanedHtml = html\n  .replace(/<header[\\s\\S]*?<\\/header>/gi, '')\n  .replace(/<footer[\\s\\S]*?<\\/footer>/gi, '')\n  .replace(/<script[\\s\\S]*?<\\/script>/gi, '')\n  .replace(/<style[\\s\\S]*?<\\/style>/gi, '')\n  .replace(/<nav[\\s\\S]*?<\\/nav>/gi, '')\n  .replace(/<svg[\\s\\S]*?<\\/svg>/gi, '')\n  .replace(/<noscript[\\s\\S]*?<\\/noscript>/gi, '')\n  .replace(/<link[\\s\\S]*?<\\/link>/gi, '')\n  .replace(/<meta[\\s\\S]*?<\\/meta>/gi, '')\n  .replace(/<aside[\\s\\S]*?<\\/aside>/gi, '')\n  .replace(/<iframe[\\s\\S]*?<\\/iframe>/gi, '')\n  .replace(/<canvas[\\s\\S]*?<\\/canvas>/gi, '')\n  .replace(/<figure[\\s\\S]*?<\\/figure>/gi, '')\n  .replace(/<img\\b[^>]*>/gi, '');\n\nreturn [\n  {\n    json: {\n      body: cleanedHtml\n    }\n  }\n];\n"
+        "mode": "runOnceForEachItem",
+        "jsCode": "const html = $json.body;\n\nconst cleanedHtml = html\n  .replace(/<header[\\s\\S]*?<\\/header>/gi, '')\n  .replace(/<footer[\\s\\S]*?<\\/footer>/gi, '')\n  .replace(/<script[\\s\\S]*?<\\/script>/gi, '')\n  .replace(/<style[\\s\\S]*?<\\/style>/gi, '')\n  .replace(/<nav[\\s\\S]*?<\\/nav>/gi, '')\n  .replace(/<svg[\\s\\S]*?<\\/svg>/gi, '')\n  .replace(/<noscript[\\s\\S]*?<\\/noscript>/gi, '')\n  .replace(/<link[\\s\\S]*?<\\/link>/gi, '')\n  .replace(/<meta[\\s\\S]*?<\\/meta>/gi, '')\n  .replace(/<aside[\\s\\S]*?<\\/aside>/gi, '')\n  .replace(/<iframe[\\s\\S]*?<\\/iframe>/gi, '')\n  .replace(/<canvas[\\s\\S]*?<\\/canvas>/gi, '')\n  .replace(/<figure[\\s\\S]*?<\\/figure>/gi, '')\n  .replace(/<img\\b[^>]*>/gi, '');\n\nreturn {\n    json: {\n      body: cleanedHtml\n    }\n  };\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -953,7 +930,8 @@
     },
     {
       "parameters": {
-        "jsCode": "var item = {\n  clinical_trial: {\n    // Infos d'essai clinique ajoutées\n    title: $input.first().json.output.title,\n    status: $input.first().json.output.status,\n    summary: $input.first().json.output.summary,\n    currentEnrollmentCount: $input.first().json.output.currentEnrollmentCount,\n    type: $input.first().json.output.type,\n    phase: $input.first().json.output.phase,\n    organization: $input.first().json.output.organization,\n    dates: $input.first().json.output.dates,\n    conditions: $input.first().json.output.conditions,\n    interventions: $input.first().json.output.interventions,\n    eligibility: $input.first().json.output.eligibility,\n    sponsor: $input.first().json.output.sponsor,\n    collaborators: $input.first().json.output.collaborators,\n    contacts: $input.first().json.output.contacts,\n    locations: $input.first().json.output.locations,\n    sourceMetaData: {\n      originalSourceId: $input.first().json.output.originalSourceId,\n      trialSourceUrl: $input.first().json.output.trialSourceUrl,\n      dataSource: {\n        name: \"ClinicalTrials.gov public API\",\n        type: \"API\",\n        uri: $('Start Webhook').first().json.query.url\n      }\n    }\n  }\n};\n\nreturn item;\n"
+        "mode": "runOnceForEachItem",
+        "jsCode": "var item = {\n  clinical_trial: {\n    // Infos d'essai clinique ajoutées\n    title: $json.output.title,\n    status: $json.output.status,\n    summary: $json.output.summary,\n    currentEnrollmentCount: $json.output.currentEnrollmentCount,\n    type: $json.output.type,\n    phase: $json.output.phase,\n    organization: $json.output.organization,\n    dates: $json.output.dates,\n    conditions: $json.output.conditions,\n    interventions: $json.output.interventions,\n    eligibility: $json.output.eligibility,\n    sponsor: $json.output.sponsor,\n    collaborators: $json.output.collaborators,\n    contacts: $json.output.contacts,\n    locations: $json.output.locations,\n    sourceMetaData: {\n      originalSourceId: $json.output.originalSourceId,\n      trialSourceUrl: $json.output.trialSourceUrl,\n      dataSource: {\n        name: \"ClinicalTrials.gov public API\",\n        type: \"API\",\n        uri: $('Start Webhook').first().json.query.url\n      }\n    }\n  }\n};\n\nreturn item;\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -1087,16 +1065,30 @@
     },
     {
       "parameters": {
-        "jsCode": "return [\n  {\n    json: null\n  }\n];\n"
+        "mode": "runOnceForEachItem",
+        "jsCode": "var item = {\n  clinical_trial: {\n    // Infos d'essai clinique ajoutées\n    title: $json.clinical_trial.title,\n    status: $json.clinical_trial.status,\n    summary: $json.clinical_trial.summary,\n    currentEnrollmentCount: $json.clinical_trial.currentEnrollmentCount,\n    type: $json.clinical_trial.type,\n    phase: $json.clinical_trial.phase,\n    organization: $json.clinical_trial.organization,\n    dates: $json.clinical_trial.dates,\n    conditions: $json.clinical_trial.conditions,\n    interventions: $json.clinical_trial.interventions,\n    eligibility: $json.clinical_trial.eligibility,\n    sponsor: $json.clinical_trial.sponsor,\n    collaborators: $json.clinical_trial.collaborators,\n    contacts: $json.clinical_trial.contacts,\n    locations: $json.clinical_trial.locations,\n    sourceMetaData: {\n      originalSourceId: $json.clinical_trial.originalSourceId,\n      trialSourceUrl: $json.clinical_trial.trialSourceUrl,\n      dataSource: {\n        name: \"ClinicalTrials.gov public API\",\n        type: \"API\",\n        uri: $('Start Webhook').first().json.query.url\n      }\n    }\n  }\n};\n\nreturn item;\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2220,
+        100,
+        1100
+      ],
+      "id": "a6011b6b-f3fd-4b87-a363-27cf51862ffa",
+      "name": "Convert To Clinical Trial Data1"
+    },
+    {
+      "parameters": {
+        "jsCode": "let items = [];\n\nfor (const url of $('AI Agent Search Page').first().json.output.urls) {\n  items.push({\n    json: {\n      url: url\n    }\n  });\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -380,
         440
       ],
-      "id": "dc9d57c9-bb8f-406f-ab90-0d5808d0e211",
-      "name": "RESET DATA"
+      "id": "5b05b524-66ec-46ca-8de3-32c514b16498",
+      "name": "Urls list for loop"
     }
   ],
   "pinData": {},
@@ -1169,17 +1161,6 @@
         [
           {
             "node": "HTML CLEAN Search Page",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Urls list for loop": {
-      "main": [
-        [
-          {
-            "node": "Loop Over Items",
             "type": "main",
             "index": 0
           }
@@ -1343,7 +1324,7 @@
       "main": [
         [
           {
-            "node": "RESET DATA",
+            "node": "Pagination Incrementation1",
             "type": "main",
             "index": 0
           }
@@ -1492,18 +1473,7 @@
         ],
         [
           {
-            "node": "Convert To Mongo Data1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Convert To Mongo Data1": {
-      "main": [
-        [
-          {
-            "node": "Insert Clinical Trial1",
+            "node": "Convert To Clinical Trial Data1",
             "type": "main",
             "index": 0
           }
@@ -1514,7 +1484,7 @@
       "main": [
         [
           {
-            "node": "Loop Over Items1",
+            "node": "Check Urls",
             "type": "main",
             "index": 0
           }
@@ -1670,7 +1640,18 @@
         ]
       ]
     },
-    "RESET DATA": {
+    "Convert To Clinical Trial Data1": {
+      "main": [
+        [
+          {
+            "node": "Insert Clinical Trial1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Urls list for loop": {
       "main": [
         [
           {
@@ -1686,7 +1667,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "227660fc-32be-42e8-8b39-392f8548f216",
+  "versionId": "fc046065-5ff3-421b-a995-8969aa420243",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "d19ad8d6d925953386bcaefd90b1322f319c955024c0f733144adb20b40abd2b"
