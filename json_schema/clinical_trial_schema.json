@@ -12,10 +12,10 @@
       "type": "string"
     },
     "currentEnrollmentCount": {
-      "type": "integer"
+      "type": ["integer", "null"]
     },
     "organization": {
-      "type": "string"
+      "type": ["string", "null"]
     },
     "summary": {
       "type": "string"
@@ -36,11 +36,11 @@
       "type": "object",
       "properties": {
         "startDate": {
-          "type": "string",
+          "type": ["string", "null"],
           "format": "date"
         },
         "estimatedCompletionDate": {
-          "type": "string",
+          "type": ["string", "null"],
           "format": "date"
         }
       }
@@ -65,7 +65,7 @@
             "type": "string"
           },
           "description": {
-            "type": "string"
+            "type": ["string", "null"]
           },
           "type": {
             "type": "string",
@@ -118,14 +118,14 @@
         "type": "object",
         "properties": {
           "email": {
-            "type": "string",
+            "type": ["string", "null"],
             "format": "email"
           },
           "name": {
             "type": "string"
           },
           "phone": {
-            "type": "string"
+            "type": ["string", "null"]
           },
           "isMainContact": {
             "type": "boolean"
@@ -139,17 +139,17 @@
         "type": "object",
         "properties": {
           "city": {
-            "type": "string"
+            "type": ["string", "null"]
           },
           "country": {
-            "type": "string"
+            "type": ["string", "null"]
           },
           "facility": {
-            "type": "string"
+            "type": ["string", "null"]
           }
         }
       }
     }
   },
-  "required": ["originalSource_id", "trialSource_url", "title", "currentEnrollmentCount", "organization", "summary", "status", "type", "phase", "dates", "conditions", "interventions", "eligibility", "sponsor", "collaborators", "contacts", "locations"]
+  "required": ["originalSourceId", "trialSourceUrl", "title", "currentEnrollmentCount", "organization", "summary", "status", "type", "phase", "dates", "conditions", "interventions", "eligibility", "sponsor", "collaborators", "contacts", "locations"]
 }
